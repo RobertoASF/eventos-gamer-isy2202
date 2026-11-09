@@ -98,8 +98,16 @@ docker compose down -v
 
 ## Despliegue en la máquina virtual
 
-1. Abrir los puertos 80 y 443 en el firewall de la VM.
-2. Instalar Docker y copiar el proyecto.
+Desplegado en AWS (EC2 t3.medium, Ubuntu Server 26.04 LTS, 4 GB de RAM, 20 GB de disco) con IP elástica, para que la dirección no cambie al detener y volver a iniciar la instancia.
+
+1. Abrir los puertos 80 y 443 en el grupo de seguridad (y el 22 solo desde la IP de quien administra).
+2. Instalar Docker y copiar el proyecto:
+
+```bash
+sudo apt-get install -y docker.io docker-compose-v2 docker-buildx unzip
+sudo usermod -aG docker $USER
+```
+
 3. En `infra`, copiar `.env.example` como `.env` y cambiar las claves.
 4. Ejecutar con la IP pública de la VM:
 
@@ -107,9 +115,9 @@ docker compose down -v
 ./desplegar-vm.sh 20.10.30.40
 ```
 
-El script levanta los contenedores y obtiene un certificado de Let's Encrypt para `[IP].sslip.io` (sslip.io resuelve ese nombre a la misma IP). El sitio queda en `https://[IP].sslip.io/eventos` y `http://[IP]/eventos` redirige a esa dirección.
+El script levanta los contenedores y obtiene un certificado de Let's Encrypt que cubre la IP y el nombre `[IP].sslip.io` (sslip.io resuelve ese nombre a la misma IP). El sitio queda en `https://[IP]/eventos`, y `http://[IP]/eventos` redirige a HTTPS.
 
-El certificado dura 90 días; para renovarlo basta con volver a ejecutar el script.
+Let's Encrypt entrega los certificados para IP con una validez de 6 días, por eso el script deja programado `renovar-certificado.sh` en cron, dos veces al día y cada vez que la máquina se enciende. Los contenedores también vuelven a levantarse solos al encender la VM.
 
 ## Seguridad
 
@@ -144,6 +152,7 @@ Los reportes de cada ejecución quedan en `zap/reportes`:
 | `antes` | Versión de la semana 2, antes de las correcciones |
 | `verificacion-1` | Primera verificación después de las correcciones |
 | `despues` | Verificación final |
+| `vm` | Sitio desplegado en AWS, escaneado desde fuera de la VM |
 
 ## Pruebas
 
