@@ -6,9 +6,10 @@
 #
 # Variables opcionales:
 #   OBJETIVO     URL base del sitio. Por defecto http://nginx (el contenedor de nginx en la red de Docker).
-#                Para la maquina virtual: OBJETIVO=http://[IP] ./escanear.sh reportes/vm
 #   RED          Red de Docker donde corren los servicios. Por defecto eventos-gamer_interna
 #   ZAP_USUARIO  Usuario de prueba con el que ZAP inicia sesion. Por defecto mati
+#   SOLO_WEB     Con 1 escanea solo el sitio. Se usa desde fuera de la VM, donde las API no son accesibles:
+#                OBJETIVO=https://[IP] RED=bridge SOLO_WEB=1 ZAP_CLAVE='...' ./escanear.sh reportes/vm
 set -uo pipefail
 export MSYS_NO_PATHCONV=1
 
@@ -55,6 +56,11 @@ trap 'rm -rf .tmp' EXIT
 echo "== Sitio web: $OBJETIVO/eventos"
 preparar_plan plan-web.yaml
 ejecutar_zap zap-web plan-web.yaml
+
+if [ "${SOLO_WEB:-0}" = "1" ]; then
+    echo "== Reportes en zap/$REPORTES (solo sitio web)"
+    exit 0
+fi
 
 echo "== Token JWT para las rutas privadas de la API"
 TOKEN=$(docker run --rm --network "$RED" --entrypoint curl "$IMAGEN" -s -X POST "$API_USUARIOS/api/auth/login" \
