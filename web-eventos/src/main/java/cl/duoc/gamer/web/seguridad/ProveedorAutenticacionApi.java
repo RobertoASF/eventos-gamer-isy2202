@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,8 @@ public class ProveedorAutenticacionApi implements AuthenticationProvider {
         try {
             respuesta = clienteUsuarios.login(nombreUsuario, password)
                     .orElseThrow(() -> new BadCredentialsException("Usuario o clave incorrectos"));
+        } catch (ClienteUsuarios.CuentaBloqueadaException ex) {
+            throw new LockedException("Cuenta bloqueada temporalmente", ex);
         } catch (RestClientException ex) {
             throw new AuthenticationServiceException("El servicio de usuarios no está disponible", ex);
         }

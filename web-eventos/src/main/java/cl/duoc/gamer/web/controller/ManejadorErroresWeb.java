@@ -1,7 +1,10 @@
 package cl.duoc.gamer.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +22,18 @@ public class ManejadorErroresWeb {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String noEncontrado(Model model) {
         return pagina(model, HttpStatus.NOT_FOUND, "El evento que buscas no existe o ya no está publicado.");
+    }
+
+    // La API rechazo el token (vencio o no es valido): se cierra la sesion y se pide iniciarla de nuevo
+    @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
+    public String tokenRechazado(HttpServletRequest request) {
+        HttpSession sesion = request.getSession(false);
+        if (sesion != null) {
+            sesion.invalidate();
+        }
+        SecurityContextHolder.clearContext();
+        log.info("Sesion cerrada porque la API rechazo el token del usuario");
+        return "redirect:/login?expirada";
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

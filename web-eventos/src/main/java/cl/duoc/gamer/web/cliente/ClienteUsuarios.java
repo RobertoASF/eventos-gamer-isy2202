@@ -18,7 +18,8 @@ public class ClienteUsuarios {
         this.restClient = FabricaClientes.crear(builder, urlBase);
     }
 
-    // Devuelve vacio cuando la API rechaza las credenciales
+    // Devuelve vacio cuando la API rechaza las credenciales.
+    // Si la cuenta esta bloqueada por intentos fallidos lanza CuentaBloqueadaException
     public Optional<LoginRespuesta> login(String nombreUsuario, String password) {
         try {
             LoginRespuesta respuesta = restClient.post()
@@ -28,8 +29,17 @@ public class ClienteUsuarios {
                     .retrieve()
                     .body(LoginRespuesta.class);
             return Optional.ofNullable(respuesta);
+        } catch (HttpClientErrorException.TooManyRequests ex) {
+            throw new CuentaBloqueadaException();
         } catch (HttpClientErrorException.Unauthorized | HttpClientErrorException.BadRequest ex) {
             return Optional.empty();
+        }
+    }
+
+    public static class CuentaBloqueadaException extends RuntimeException {
+
+        public CuentaBloqueadaException() {
+            super("Cuenta bloqueada temporalmente por intentos fallidos");
         }
     }
 }
