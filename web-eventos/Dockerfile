@@ -1,10 +1,10 @@
-FROM maven:3.9-eclipse-temurin-21 AS compilacion
+FROM maven:3.9.11-eclipse-temurin-21 AS compilacion
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 RUN --mount=type=cache,target=/root/.m2 mvn -B -q package -DskipTests
 
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21.0.13_9-jre
 WORKDIR /app
 COPY --from=compilacion /app/target/*.jar app.jar
 RUN useradd --system --no-create-home gamer

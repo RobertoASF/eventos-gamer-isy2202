@@ -1,0 +1,3 @@
+# Los certificados y llaves se generan en cada maquina, nunca se suben al repositorio
+*
+!.gitignore

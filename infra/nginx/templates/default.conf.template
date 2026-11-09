@@ -1,0 +1,86 @@
+# La imagen oficial de nginx reemplaza ${URL_HTTPS} con la variable de entorno al iniciar el contenedor.
+
+# No muestra la version de nginx en el encabezado Server ni en las paginas de error
+server_tokens off;
+
+# Puerto con el que el navegador llego al sitio (443, o el que venga en el encabezado Host).
+# Spring lo usa para armar bien las redirecciones
+map $http_host $puerto_publico {
+    ~:(?<puerto>[0-9]+)$ $puerto;
+    default 443;
+}
+
+# HTTP: solo atiende el desafio de Let's Encrypt y redirige todo lo demas a HTTPS
+server {
+    listen 80 default_server;
+    server_name _;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "DENY" always;
+        return 301 ${URL_HTTPS}$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl default_server;
+    http2 on;
+    server_name _;
+
+    ssl_certificate /etc/nginx/certificados/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certificados/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;
+
+    # El sitio no recibe archivos: se rechazan cuerpos grandes y conexiones lentas
+    client_max_body_size 64k;
+    client_body_timeout 10s;
+    client_header_timeout 10s;
+
+    # Respuestas que genera nginx (redirecciones y 404). Las de /eventos/ las pone Spring Security
+    location = / {
+        add_header Strict-Transport-Security "max-age=31536000" always;
+        add_header Content-Security-Policy "default-src 'none'; frame-ancestors 'none'" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "DENY" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        return 301 /eventos/;
+    }
+
+    location = /eventos {
+        add_header Strict-Transport-Security "max-age=31536000" always;
+        add_header Content-Security-Policy "default-src 'none'; frame-ancestors 'none'" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "DENY" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        return 301 /eventos/;
+    }
+
+    location /eventos/ {
+        proxy_pass http://web-eventos:8080;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Port $puerto_publico;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 30s;
+    }
+
+    # Cualquier otra ruta no existe en este servidor
+    location / {
+        add_header Strict-Transport-Security "max-age=31536000" always;
+        add_header Content-Security-Policy "default-src 'none'; frame-ancestors 'none'" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "DENY" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        return 404;
+    }
+}
