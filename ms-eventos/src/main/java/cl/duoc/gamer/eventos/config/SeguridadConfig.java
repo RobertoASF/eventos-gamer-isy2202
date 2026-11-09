@@ -14,12 +14,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @RequiredArgsConstructor
 public class SeguridadConfig {
+
+    private static final String EMISOR_TOKENS = "ms-usuarios";
 
     private final RespuestasSeguridad respuestasSeguridad;
 
@@ -44,10 +47,13 @@ public class SeguridadConfig {
         return http.build();
     }
 
-    // Usa el mismo secreto que ms-usuarios, asi valida los tokens sin llamar a ese servicio
+    // Usa el mismo secreto que ms-usuarios, asi valida los tokens sin llamar a ese servicio.
+    // Ademas de la firma y la expiracion, exige que el emisor sea ms-usuarios
     @Bean
     public JwtDecoder jwtDecoder(@Value("${jwt.secreto}") String secreto) {
         SecretKey clave = new SecretKeySpec(secreto.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        return NimbusJwtDecoder.withSecretKey(clave).macAlgorithm(MacAlgorithm.HS256).build();
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(clave).macAlgorithm(MacAlgorithm.HS256).build();
+        decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(EMISOR_TOKENS));
+        return decoder;
     }
 }

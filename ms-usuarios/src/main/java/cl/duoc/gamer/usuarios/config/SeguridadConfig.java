@@ -1,6 +1,7 @@
 package cl.duoc.gamer.usuarios.config;
 
 import cl.duoc.gamer.usuarios.security.RespuestasSeguridad;
+import cl.duoc.gamer.usuarios.service.TokenService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.SecretKey;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -65,9 +67,12 @@ public class SeguridadConfig {
         return new NimbusJwtEncoder(new ImmutableSecret<>(claveJwt));
     }
 
+    // Ademas de la firma y la fecha de expiracion, exige que el token lo haya emitido este servicio
     @Bean
     public JwtDecoder jwtDecoder(SecretKey claveJwt) {
-        return NimbusJwtDecoder.withSecretKey(claveJwt).macAlgorithm(MacAlgorithm.HS256).build();
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(claveJwt).macAlgorithm(MacAlgorithm.HS256).build();
+        decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(TokenService.EMISOR));
+        return decoder;
     }
 
     // El claim "rol" del token pasa a ser la autoridad ROLE_X
