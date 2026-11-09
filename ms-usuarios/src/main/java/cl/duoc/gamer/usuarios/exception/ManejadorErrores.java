@@ -1,6 +1,7 @@
 package cl.duoc.gamer.usuarios.exception;
 
 import cl.duoc.gamer.usuarios.dto.ErrorResponse;
+import cl.duoc.gamer.usuarios.service.IntentosLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,6 +25,13 @@ public class ManejadorErrores extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CredencialesInvalidasException.class)
     public ResponseEntity<Object> credenciales(CredencialesInvalidasException ex, HttpServletRequest request) {
         return responder(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(CuentaBloqueadaException.class)
+    public ResponseEntity<Object> bloqueada(CuentaBloqueadaException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header(HttpHeaders.RETRY_AFTER, String.valueOf(IntentosLoginService.BLOQUEO.toSeconds()))
+                .body(ErrorResponse.de(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage(), request.getRequestURI()));
     }
 
     @ExceptionHandler(RecursoNoEncontradoException.class)
