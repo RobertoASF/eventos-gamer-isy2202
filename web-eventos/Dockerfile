@@ -6,8 +6,12 @@ RUN --mount=type=cache,target=/root/.m2 mvn -B -q package -DskipTests
 
 FROM eclipse-temurin:21.0.13_9-jre
 WORKDIR /app
+# Aplica los parches de seguridad del sistema base publicados despues de la imagen
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --system --no-create-home gamer
 COPY --from=compilacion /app/target/*.jar app.jar
-RUN useradd --system --no-create-home gamer
 USER gamer
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

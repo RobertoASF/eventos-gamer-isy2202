@@ -86,7 +86,7 @@ services:
         condition: service_healthy
 
   nginx:
-    image: nginx:1.28.3-alpine
+    image: nginx:1.30.6-alpine
     restart: unless-stopped
     ports:
       - "80:80"
