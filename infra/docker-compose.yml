@@ -1,0 +1,80 @@
+name: eventos-gamer
+
+# Solo nginx publica un puerto (80). MySQL y las API quedan en la red interna de Docker.
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_CLAVE_USUARIOS: ${DB_CLAVE_USUARIOS}
+      DB_CLAVE_EVENTOS: ${DB_CLAVE_EVENTOS}
+    volumes:
+      - ../bd:/docker-entrypoint-initdb.d:ro
+      - datos-mysql:/var/lib/mysql
+    healthcheck:
+      # Usa TCP para responder solo cuando terminaron los scripts de la carpeta bd
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1 FROM gamer_eventos.banners LIMIT 1' > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+    networks:
+      - interna
+
+  ms-usuarios:
+    build: ../ms-usuarios
+    restart: unless-stopped
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/gamer_usuarios
+      DB_USUARIO: app_usuarios
+      DB_CLAVE: ${DB_CLAVE_USUARIOS}
+      JWT_SECRETO: ${JWT_SECRETO}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - interna
+
+  ms-eventos:
+    build: ../ms-eventos
+    restart: unless-stopped
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/gamer_eventos
+      DB_USUARIO: app_eventos
+      DB_CLAVE: ${DB_CLAVE_EVENTOS}
+      JWT_SECRETO: ${JWT_SECRETO}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - interna
+
+  web-eventos:
+    build: ../web-eventos
+    restart: unless-stopped
+    environment:
+      SERVICIO_USUARIOS_URL: http://ms-usuarios:8081
+      SERVICIO_EVENTOS_URL: http://ms-eventos:8082
+    depends_on:
+      - ms-usuarios
+      - ms-eventos
+    networks:
+      - interna
+
+  nginx:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web-eventos
+    networks:
+      - interna
+
+networks:
+  interna:
+
+volumes:
+  datos-mysql:
