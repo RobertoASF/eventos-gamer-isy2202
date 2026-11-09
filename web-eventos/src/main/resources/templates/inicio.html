@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragmentos :: cabecera('Inicio')}"></head>
+<body>
+<header th:replace="~{fragmentos :: menu('inicio')}"></header>
+
+<main>
+    <section class="portada">
+        <div class="contenedor portada__contenido">
+            <p class="portada__antetitulo">Torneos · LAN parties · Convenciones · Lanzamientos</p>
+            <h1>Todos los eventos gamer en un solo lugar</h1>
+            <p class="portada__texto">
+                Encuentra torneos, LAN parties, lanzamientos y encuentros de comunidad, presenciales u online,
+                y revisa todo lo que necesitas para participar.
+            </p>
+            <div class="portada__acciones">
+                <a class="boton" th:href="@{/buscar}">Buscar eventos</a>
+                <a sec:authorize="!isAuthenticated()" class="boton boton--borde" th:href="@{/login}">Iniciar sesión</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="contenedor seccion">
+        <div class="seccion__cabecera">
+            <h2 class="seccion__titulo">Recién publicados</h2>
+            <a class="enlace" th:href="@{/buscar}">Ver todos los eventos</a>
+        </div>
+        <div class="grilla" th:unless="${recientes.isEmpty()}">
+            <th:block th:each="evento : ${recientes}">
+                <article th:replace="~{fragmentos :: tarjeta(${evento})}"></article>
+            </th:block>
+        </div>
+        <p class="vacio" th:if="${recientes.isEmpty()}">Todavía no hay eventos próximos publicados.</p>
+    </section>
+
+    <section class="contenedor seccion">
+        <h2 class="seccion__titulo">Auspiciadores</h2>
+        <div class="banners">
+            <article class="banner" th:each="banner : ${banners}">
+                <img th:src="@{'/' + ${banner.imagen}}" th:alt="|Publicidad de ${banner.marca}|" width="600" height="220"
+                     loading="lazy">
+                <div class="banner__texto">
+                    <span class="banner__marca" th:text="${banner.marca}">Marca</span>
+                    <strong th:text="${banner.titulo}">Título</strong>
+                    <p th:text="${banner.mensaje}">Mensaje</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="contenedor seccion">
+        <h2 class="seccion__titulo">Los más populares</h2>
+        <div class="grilla grilla--cuatro" th:unless="${populares.isEmpty()}">
+            <th:block th:each="evento : ${populares}">
+                <article th:replace="~{fragmentos :: tarjeta(${evento})}"></article>
+            </th:block>
+        </div>
+        <p class="vacio" th:if="${populares.isEmpty()}">Todavía no hay eventos próximos publicados.</p>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: pie}"></footer>
+</body>
+</html>

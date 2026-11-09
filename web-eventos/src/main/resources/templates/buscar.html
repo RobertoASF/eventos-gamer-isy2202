@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Buscar eventos')}"></head>
+<body>
+<header th:replace="~{fragmentos :: menu('buscar')}"></header>
+
+<main class="contenedor seccion">
+    <h1 class="pagina__titulo">Buscar eventos</h1>
+    <p class="pagina__bajada">Filtra por nombre, videojuego, tipo de evento, lugar, fecha o modalidad. Todos los filtros son opcionales.</p>
+
+    <form class="filtros" th:action="@{/buscar}" method="get" th:object="${filtro}">
+        <div class="campo campo--ancho">
+            <label for="nombre">Nombre del evento</label>
+            <input type="search" id="nombre" th:field="*{nombre}" maxlength="80" placeholder="Ej: Copa, LAN, Smash">
+            <p class="campo__error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+        </div>
+        <div class="campo">
+            <label for="videojuegoId">Videojuego</label>
+            <select id="videojuegoId" th:field="*{videojuegoId}">
+                <option value="">Todos</option>
+                <option th:each="opcion : ${opciones.videojuegos}" th:value="${opcion.id}" th:text="${opcion.nombre}">Juego</option>
+            </select>
+            <p class="campo__error" th:if="${#fields.hasErrors('videojuegoId')}" th:errors="*{videojuegoId}"></p>
+        </div>
+        <div class="campo">
+            <label for="categoriaId">Tipo de evento</label>
+            <select id="categoriaId" th:field="*{categoriaId}">
+                <option value="">Todos</option>
+                <option th:each="opcion : ${opciones.categorias}" th:value="${opcion.id}" th:text="${opcion.nombre}">Categoría</option>
+            </select>
+            <p class="campo__error" th:if="${#fields.hasErrors('categoriaId')}" th:errors="*{categoriaId}"></p>
+        </div>
+        <div class="campo">
+            <label for="pais">País</label>
+            <select id="pais" th:field="*{pais}">
+                <option value="">Todos</option>
+                <option th:each="pais : ${opciones.paises}" th:value="${pais}" th:text="${pais}">Chile</option>
+            </select>
+            <p class="campo__error" th:if="${#fields.hasErrors('pais')}" th:errors="*{pais}"></p>
+        </div>
+        <div class="campo">
+            <label for="ciudad">Ciudad</label>
+            <select id="ciudad" th:field="*{ciudad}">
+                <option value="">Todas</option>
+                <option th:each="ciudad : ${opciones.ciudades}" th:value="${ciudad}" th:text="${ciudad}">Santiago</option>
+            </select>
+            <p class="campo__error" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}"></p>
+        </div>
+        <div class="campo">
+            <label for="modalidad">Modalidad</label>
+            <select id="modalidad" th:field="*{modalidad}">
+                <option value="">Todas</option>
+                <option value="PRESENCIAL">Presencial</option>
+                <option value="ONLINE">Online</option>
+            </select>
+            <p class="campo__error" th:if="${#fields.hasErrors('modalidad')}" th:errors="*{modalidad}"></p>
+        </div>
+        <div class="campo">
+            <label for="desde">Desde</label>
+            <input type="date" id="desde" th:field="*{desde}">
+            <p class="campo__error" th:if="${#fields.hasErrors('desde')}" th:errors="*{desde}"></p>
+        </div>
+        <div class="campo">
+            <label for="hasta">Hasta</label>
+            <input type="date" id="hasta" th:field="*{hasta}">
+            <p class="campo__error" th:if="${#fields.hasErrors('hasta')}" th:errors="*{hasta}"></p>
+        </div>
+        <div class="filtros__acciones">
+            <button type="submit" class="boton">Buscar</button>
+            <a class="boton boton--borde" th:href="@{/buscar}">Limpiar filtros</a>
+        </div>
+    </form>
+
+    <p class="aviso aviso--error" th:if="${resultado == null}" role="alert">
+        Revisa los filtros marcados antes de buscar.
+    </p>
+
+    <section th:if="${resultado != null}" class="resultados">
+        <p class="resultados__total">
+            <strong th:text="${resultado.totalElementos}">0</strong>
+            <span th:text="${resultado.totalElementos == 1} ? 'evento encontrado' : 'eventos encontrados'">eventos encontrados</span>
+        </p>
+
+        <div class="grilla" th:unless="${resultado.contenido.isEmpty()}">
+            <th:block th:each="evento : ${resultado.contenido}">
+                <article th:replace="~{fragmentos :: tarjeta(${evento})}"></article>
+            </th:block>
+        </div>
+
+        <div class="vacio" th:if="${resultado.contenido.isEmpty()}">
+            <p>No encontramos eventos con esos filtros.</p>
+            <a class="enlace" th:href="@{/buscar}">Ver todos los eventos</a>
+        </div>
+
+        <nav class="paginacion" th:if="${resultado.totalPaginas > 1}" aria-label="Páginas de resultados">
+            <a class="boton boton--borde boton--chico" th:if="${resultado.tieneAnterior()}"
+               th:href="@{/buscar(nombre=${filtro.nombre}, videojuegoId=${filtro.videojuegoId}, categoriaId=${filtro.categoriaId}, pais=${filtro.pais}, ciudad=${filtro.ciudad}, modalidad=${filtro.modalidad}, desde=${filtro.desde}, hasta=${filtro.hasta}, pagina=${resultado.pagina - 1})}">Anterior</a>
+            <span th:text="|Página ${resultado.pagina + 1} de ${resultado.totalPaginas}|">Página 1 de 2</span>
+            <a class="boton boton--borde boton--chico" th:if="${resultado.tieneSiguiente()}"
+               th:href="@{/buscar(nombre=${filtro.nombre}, videojuegoId=${filtro.videojuegoId}, categoriaId=${filtro.categoriaId}, pais=${filtro.pais}, ciudad=${filtro.ciudad}, modalidad=${filtro.modalidad}, desde=${filtro.desde}, hasta=${filtro.hasta}, pagina=${resultado.pagina + 1})}">Siguiente</a>
+        </nav>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: pie}"></footer>
+</body>
+</html>

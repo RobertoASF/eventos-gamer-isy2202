@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera(${evento.nombre})}"></head>
+<body>
+<header th:replace="~{fragmentos :: menu('')}"></header>
+
+<main class="contenedor seccion detalle" th:object="${evento}">
+    <a class="volver" th:href="@{/buscar}">&larr; Volver a la búsqueda</a>
+
+    <div class="detalle__cabecera">
+        <img class="detalle__portada" th:src="@{'/' + *{imagenPortada}}" th:alt="*{nombre}" width="640" height="360">
+        <div class="detalle__resumen">
+            <div class="etiquetas">
+                <span class="etiqueta" th:text="*{categoria}">Torneo</span>
+                <span class="etiqueta" th:classappend="*{esOnline()} ? 'etiqueta--online' : 'etiqueta--presencial'"
+                      th:text="*{esOnline()} ? 'Online' : 'Presencial'">Presencial</span>
+            </div>
+            <h1 th:text="*{nombre}">Nombre del evento</h1>
+            <dl class="ficha">
+                <div>
+                    <dt>Fecha y hora</dt>
+                    <dd th:text="${#strings.capitalize(#temporals.format(evento.fechaInicio, 'EEEE d ''de'' MMMM yyyy, HH:mm'))}">Sábado 21 de noviembre</dd>
+                </div>
+                <div>
+                    <dt>Videojuego</dt>
+                    <dd th:text="|*{videojuego} (*{generoVideojuego})|">Videojuego</dd>
+                </div>
+                <div th:unless="*{esOnline()}">
+                    <dt>Ubicación</dt>
+                    <dd th:text="|*{lugar}, *{ciudad}, *{pais}|">Lugar</dd>
+                </div>
+                <div th:if="*{esOnline()}">
+                    <dt>Enlace de acceso</dt>
+                    <dd>
+                        <a th:if="*{tieneEnlaceSeguro()}" th:href="*{enlaceAcceso}" th:text="*{enlaceAcceso}"
+                           target="_blank" rel="noopener noreferrer">Enlace</a>
+                        <span th:unless="*{tieneEnlaceSeguro()}">Se informa a los inscritos</span>
+                    </dd>
+                </div>
+                <div th:if="*{esOnline()}">
+                    <dt>Organiza desde</dt>
+                    <dd th:text="|*{ciudad}, *{pais}|">Ciudad</dd>
+                </div>
+                <div>
+                    <dt>Organizador</dt>
+                    <dd th:text="*{organizador}">Organizador</dd>
+                </div>
+                <div>
+                    <dt>Entrada</dt>
+                    <dd th:text="*{valorEntrada == 0} ? 'Gratis' : ('$' + ${#numbers.formatInteger(evento.valorEntrada, 1, 'POINT')})">Gratis</dd>
+                </div>
+                <div>
+                    <dt>Cupos</dt>
+                    <dd th:text="${#numbers.formatInteger(evento.cupos, 1, 'POINT')}">100</dd>
+                </div>
+                <div>
+                    <dt>Interesados</dt>
+                    <dd th:text="${#numbers.formatInteger(evento.interesados, 1, 'POINT')}">0</dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <div class="detalle__cuerpo">
+        <section class="bloque">
+            <h2>Descripción</h2>
+            <p th:text="*{descripcion}">Descripción</p>
+        </section>
+        <section class="bloque">
+            <h2>Requisitos de participación</h2>
+            <p th:text="*{requisitos}">Requisitos</p>
+        </section>
+        <section class="bloque">
+            <h2>Inscripción</h2>
+            <p th:text="*{inscripcion}">Inscripción</p>
+        </section>
+    </div>
+
+    <section class="bloque" th:unless="*{fotos.isEmpty()}">
+        <h2>Fotografías</h2>
+        <div class="galeria">
+            <figure th:each="foto : *{fotos}">
+                <img th:src="@{'/' + ${foto.url}}" th:alt="${foto.descripcion}" width="640" height="400" loading="lazy">
+                <figcaption th:text="${foto.descripcion}">Descripción de la foto</figcaption>
+            </figure>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: pie}"></footer>
+</body>
+</html>

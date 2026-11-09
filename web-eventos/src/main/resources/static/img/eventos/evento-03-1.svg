@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400">
+<defs>
+<linearGradient id="f31" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#039051"/><stop offset=".55" stop-color="#091623"/><stop offset="1" stop-color="#050d15"/></linearGradient>
+<radialGradient id="f31l" cx=".5" cy="0" r=".8"><stop offset="0" stop-color="#00d26a" stop-opacity=".55"/><stop offset="1" stop-color="#00d26a" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="640" height="400" fill="url(#f31)"/>
+<rect x="30" y="40" width="430" height="250" rx="10" fill="#005e30" stroke="#00d26a" stroke-width="3"/>
+<rect x="60" y="70" width="143" height="14" rx="7" fill="#00d26a" opacity="0.41"/>
+<rect x="60" y="104" width="335" height="14" rx="7" fill="#00d26a" opacity="0.39"/>
+<rect x="60" y="138" width="315" height="14" rx="7" fill="#00d26a" opacity="0.27"/>
+<rect x="60" y="172" width="168" height="14" rx="7" fill="#00d26a" opacity="0.44"/>
+<rect x="60" y="206" width="322" height="14" rx="7" fill="#00d26a" opacity="0.52"/>
+<rect x="60" y="240" width="177" height="14" rx="7" fill="#00d26a" opacity="0.59"/>
+<circle cx="430" cy="65" r="8" fill="#ff4d4d"/>
+<text x="392" y="70" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">EN VIVO</text>
+<rect x="480" y="40" width="130" height="250" rx="10" fill="#14142a" stroke="#2e3266" stroke-width="2"/>
+<rect x="495" y="60" width="52" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="85" width="92" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="110" width="53" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="135" width="58" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="160" width="64" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="185" width="84" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="210" width="96" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="235" width="78" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="495" y="260" width="83" height="9" rx="4" fill="#a7a9cf" opacity=".5"/>
+<rect x="30" y="310" width="580" height="60" rx="10" fill="#14142a"/>
+<rect x="45" y="335" width="461" height="10" rx="5" fill="#00d26a"/>
+</svg>

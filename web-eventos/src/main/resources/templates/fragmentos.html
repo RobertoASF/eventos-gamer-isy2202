@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="cabecera(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="|${titulo} · Eventos Gamer|">Eventos Gamer</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<header th:fragment="menu(activo)" class="barra">
+    <div class="contenedor barra__contenido">
+        <a class="marca" th:href="@{/}">
+            <img th:src="@{/img/logo.svg}" alt="" width="40" height="40">
+            <span>Eventos <strong>Gamer</strong></span>
+        </a>
+        <nav class="menu" aria-label="Menú principal">
+            <a class="menu__enlace" th:href="@{/}" th:classappend="${activo == 'inicio'} ? 'menu__enlace--activo'">Inicio</a>
+            <a class="menu__enlace" th:href="@{/buscar}" th:classappend="${activo == 'buscar'} ? 'menu__enlace--activo'">Buscar eventos</a>
+            <a sec:authorize="!isAuthenticated()" class="boton boton--chico" th:href="@{/login}">Iniciar sesión</a>
+            <div sec:authorize="isAuthenticated()" class="sesion">
+                <span class="sesion__usuario">
+                    <span class="sesion__avatar" th:text="${#strings.substring(#authentication.principal.nombre(), 0, 1)}">U</span>
+                    <span class="sesion__nombre" th:text="${#authentication.principal.nombre()}">Usuario</span>
+                </span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="boton boton--chico boton--borde">Cerrar sesión</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<article th:fragment="tarjeta(evento)" class="tarjeta">
+    <a class="tarjeta__enlace" th:href="@{/detalle/{id}(id=${evento.id})}">
+        <img class="tarjeta__imagen" th:src="@{'/' + ${evento.imagenPortada}}" th:alt="${evento.nombre}"
+             width="640" height="360" loading="lazy">
+        <div class="tarjeta__cuerpo">
+            <div class="etiquetas">
+                <span class="etiqueta" th:text="${evento.categoria}">Torneo</span>
+                <span class="etiqueta"
+                      th:classappend="${evento.modalidad == 'ONLINE'} ? 'etiqueta--online' : 'etiqueta--presencial'"
+                      th:text="${evento.modalidad == 'ONLINE'} ? 'Online' : 'Presencial'">Presencial</span>
+            </div>
+            <h3 class="tarjeta__titulo" th:text="${evento.nombre}">Nombre del evento</h3>
+            <p class="tarjeta__juego" th:text="${evento.videojuego}">Videojuego</p>
+            <p class="tarjeta__resumen" th:text="${evento.resumen}">Resumen del evento</p>
+            <dl class="datos">
+                <div>
+                    <dt>Fecha</dt>
+                    <dd th:text="${#temporals.format(evento.fechaInicio, 'dd MMM yyyy, HH:mm')}">21 nov 2026</dd>
+                </div>
+                <div>
+                    <dt>Lugar</dt>
+                    <dd th:text="|${evento.ciudad}, ${evento.pais}|">Santiago, Chile</dd>
+                </div>
+                <div>
+                    <dt>Entrada</dt>
+                    <dd th:text="${evento.valorEntrada == 0} ? 'Gratis' : ('$' + ${#numbers.formatInteger(evento.valorEntrada, 1, 'POINT')})">Gratis</dd>
+                </div>
+            </dl>
+            <p class="tarjeta__interes">
+                <strong th:text="${#numbers.formatInteger(evento.interesados, 1, 'POINT')}">0</strong> interesados
+            </p>
+        </div>
+    </a>
+</article>
+
+<footer th:fragment="pie" class="pie">
+    <div class="contenedor pie__contenido">
+        <p><strong>Eventos Gamer</strong> · Torneos, LAN parties y encuentros para la comunidad gamer</p>
+        <p class="pie__nota">Proyecto de la asignatura Seguridad y Calidad en el Desarrollo de Software (ISY2202) · Duoc UC</p>
+    </div>
+</footer>
+
+</body>
+</html>
