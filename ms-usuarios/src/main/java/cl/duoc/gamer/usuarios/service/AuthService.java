@@ -61,9 +61,10 @@ public class AuthService {
                 UsuarioResponse.desde(usuario));
     }
 
-    // El nombre viene del usuario: se quitan saltos de linea para que no pueda inventar lineas en el log
+    // El nombre viene del usuario: se reemplazan saltos de linea y cualquier otro caracter de control
+    // para que no pueda inventar lineas en el log ni ensuciarlo con bytes nulos
     private String paraLog(String texto) {
-        String limpio = texto.replaceAll("[\\r\\n\\t]", "_");
+        String limpio = texto.replaceAll("\\p{Cntrl}", "_");
         return limpio.length() > 30 ? limpio.substring(0, 30) + "..." : limpio;
     }
 }

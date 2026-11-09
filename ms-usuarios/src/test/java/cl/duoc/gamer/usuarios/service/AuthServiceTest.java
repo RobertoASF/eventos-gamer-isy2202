@@ -80,6 +80,14 @@ class AuthServiceTest {
     }
 
     @Test
+    void unUsuarioConCaracteresDeControlNoRompeElLogin() {
+        when(usuarioRepository.findByNombreUsuario(anyString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> authService.login(new LoginRequest("mati\r\nINFO Login correcto\u0000", CLAVE)))
+                .isInstanceOf(CredencialesInvalidasException.class);
+    }
+
+    @Test
     void noRevisaLaClaveSiLaCuentaEstaBloqueada() {
         when(intentos.estaBloqueado("mati")).thenReturn(true);
 

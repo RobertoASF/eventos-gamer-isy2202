@@ -33,7 +33,8 @@ public class AuditoriaAccesos {
 
     private String usuario(Authentication authentication) {
         String nombre = authentication == null ? "-" : authentication.getName();
-        String limpio = nombre.replaceAll("[\\r\\n\\t]", "_");
+        // Reemplaza saltos de linea y cualquier caracter de control que venga en el usuario escrito en el login
+        String limpio = nombre.replaceAll("\\p{Cntrl}", "_");
         return limpio.length() > 30 ? limpio.substring(0, 30) + "..." : limpio;
     }
 
