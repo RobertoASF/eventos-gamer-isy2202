@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: ms-eventos
+  version: 1.0.0
+  description: API de eventos, búsqueda y banners de la plataforma Eventos Gamer
+paths:
+  /api/eventos/recientes:
+    get:
+      summary: Próximos eventos, del publicado más nuevo al más antiguo
+      parameters:
+        - name: limite
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 12, example: 6 }
+      responses:
+        "200": { description: Lista de eventos }
+  /api/eventos/populares:
+    get:
+      summary: Próximos eventos con más interesados
+      parameters:
+        - name: limite
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 12, example: 4 }
+      responses:
+        "200": { description: Lista de eventos }
+  /api/eventos/buscar:
+    get:
+      summary: Búsqueda con filtros opcionales
+      parameters:
+        - { name: nombre, in: query, schema: { type: string, maxLength: 80, example: copa } }
+        - { name: videojuegoId, in: query, schema: { type: integer, example: 2 } }
+        - { name: categoriaId, in: query, schema: { type: integer, example: 1 } }
+        - { name: pais, in: query, schema: { type: string, example: Chile } }
+        - { name: ciudad, in: query, schema: { type: string, example: Santiago } }
+        - { name: modalidad, in: query, schema: { type: string, enum: [PRESENCIAL, ONLINE], example: PRESENCIAL } }
+        - { name: desde, in: query, schema: { type: string, format: date, example: "2026-11-01" } }
+        - { name: hasta, in: query, schema: { type: string, format: date, example: "2027-03-31" } }
+        - { name: pagina, in: query, schema: { type: integer, example: 0 } }
+        - { name: tamano, in: query, schema: { type: integer, example: 9 } }
+      responses:
+        "200": { description: Página de resultados }
+        "400": { description: Filtros no válidos }
+  /api/eventos/filtros:
+    get:
+      summary: Opciones para el formulario de búsqueda
+      responses:
+        "200": { description: Videojuegos, categorías, países, ciudades y modalidades }
+  /api/banners:
+    get:
+      summary: Avisos comerciales activos
+      responses:
+        "200": { description: Lista de banners }
+  /api/eventos/{id}:
+    get:
+      summary: Detalle completo de un evento (requiere token)
+      security:
+        - jwt: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer, example: 1 }
+      responses:
+        "200": { description: Detalle del evento }
+        "401": { description: Falta el token o no es válido }
+        "404": { description: El evento no existe }
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,85 @@
+# Plan de ZAP (Automation Framework) para las API del backend.
+# Importa la definicion OpenAPI de cada servicio y ejecuta el escaneo pasivo y el activo.
+# El token JWT se agrega a todas las peticiones con las variables ZAP_AUTH_HEADER y ZAP_AUTH_HEADER_VALUE.
+# Variables de entorno que usa:
+#   API_EVENTOS   URL de ms-eventos, por ejemplo http://ms-eventos:8082
+#   API_USUARIOS  URL de ms-usuarios, por ejemplo http://ms-usuarios:8081
+#   REPORTES      carpeta de salida dentro de /zap/wrk
+env:
+  contexts:
+    - name: api-eventos
+      urls:
+        - ${API_EVENTOS}/api/
+      includePaths:
+        - ${API_EVENTOS}.*
+    - name: api-usuarios
+      urls:
+        - ${API_USUARIOS}/api/
+      includePaths:
+        - ${API_USUARIOS}.*
+  parameters:
+    failOnError: true
+    progressToStdout: true
+
+jobs:
+  - type: passiveScan-config
+    parameters:
+      maxAlertsPerRule: 10
+
+  - type: openapi
+    parameters:
+      apiFile: /zap/wrk/api/ms-eventos.yaml
+      targetUrl: ${API_EVENTOS}
+      context: api-eventos
+
+  - type: openapi
+    parameters:
+      apiFile: /zap/wrk/api/ms-usuarios.yaml
+      targetUrl: ${API_USUARIOS}
+      context: api-usuarios
+
+  # Ademas de lo que declara OpenAPI, revisa rutas comunes que no deberian responder
+  - type: requestor
+    requests:
+      - url: ${API_EVENTOS}/actuator
+      - url: ${API_EVENTOS}/actuator/health
+      - url: ${API_USUARIOS}/actuator
+      - url: ${API_USUARIOS}/actuator/health
+      - url: ${API_EVENTOS}/api/eventos/1
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: activeScan
+    parameters:
+      context: api-eventos
+      maxRuleDurationInMins: 2
+      maxScanDurationInMins: 15
+
+  - type: activeScan
+    parameters:
+      context: api-usuarios
+      maxRuleDurationInMins: 2
+      maxScanDurationInMins: 10
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: /zap/wrk/${REPORTES}
+      reportFile: zap-api
+      reportTitle: Eventos Gamer - API del backend
+    risks: [high, medium, low, info]
+    confidences: [high, medium, low]
+
+  - type: report
+    parameters:
+      template: traditional-json
+      reportDir: /zap/wrk/${REPORTES}
+      reportFile: zap-api
+    risks: [high, medium, low, info]
+    confidences: [high, medium, low]

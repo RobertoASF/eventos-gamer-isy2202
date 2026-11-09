@@ -1,0 +1,37 @@
+openapi: 3.0.3
+info:
+  title: ms-usuarios
+  version: 1.0.0
+  description: API de inicio de sesión de la plataforma Eventos Gamer
+paths:
+  /api/auth/login:
+    post:
+      summary: Valida usuario y clave y entrega un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [nombreUsuario, password]
+              properties:
+                nombreUsuario: { type: string, maxLength: 30, example: zap_prueba }
+                password: { type: string, maxLength: 72, example: clave-incorrecta }
+      responses:
+        "200": { description: Token y datos del usuario }
+        "400": { description: Datos no válidos }
+        "401": { description: Usuario o clave incorrectos }
+  /api/usuarios/perfil:
+    get:
+      summary: Datos del usuario dueño del token
+      security:
+        - jwt: []
+      responses:
+        "200": { description: Datos del usuario }
+        "401": { description: Falta el token o no es válido }
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

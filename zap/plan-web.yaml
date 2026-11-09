@@ -1,0 +1,91 @@
+# Plan de ZAP (Automation Framework) para el sitio web.
+# Recorre el sitio con un usuario autenticado, ejecuta el escaneo pasivo y el activo, y genera los reportes.
+# Variables de entorno que usa:
+#   OBJETIVO    URL base del sitio, por ejemplo http://nginx o http://[IP]
+#   ZAP_USUARIO usuario de prueba
+#   ZAP_CLAVE   clave del usuario de prueba
+#   REPORTES    carpeta de salida dentro de /zap/wrk, por ejemplo reportes/antes
+env:
+  contexts:
+    - name: eventos-web
+      urls:
+        - ${OBJETIVO}/eventos/
+      includePaths:
+        - ${OBJETIVO}/eventos.*
+      excludePaths:
+        # Si el spider cierra la sesion el resto del escaneo queda sin autenticar
+        - ${OBJETIVO}/eventos/logout.*
+      authentication:
+        method: form
+        parameters:
+          loginPageUrl: ${OBJETIVO}/eventos/login
+          loginRequestUrl: ${OBJETIVO}/eventos/login
+          loginRequestBody: username={%username%}&password={%password%}&_csrf=token
+        verification:
+          method: poll
+          loggedInRegex: Cerrar sesi
+          loggedOutRegex: Ingresa con tu cuenta
+          pollFrequency: 60
+          pollUnits: requests
+          pollUrl: ${OBJETIVO}/eventos/
+      sessionManagement:
+        method: cookie
+      users:
+        - name: usuario-prueba
+          credentials:
+            username: ${ZAP_USUARIO}
+            password: ${ZAP_CLAVE}
+  parameters:
+    failOnError: true
+    progressToStdout: true
+
+jobs:
+  - type: passiveScan-config
+    parameters:
+      maxAlertsPerRule: 10
+      scanOnlyInScope: true
+
+  # Recorrido sin sesion (paginas publicas)
+  - type: spider
+    parameters:
+      context: eventos-web
+      maxDuration: 2
+
+  # Recorrido con sesion (incluye el detalle de los eventos)
+  - type: spider
+    parameters:
+      context: eventos-web
+      user: usuario-prueba
+      maxDuration: 3
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: activeScan
+    parameters:
+      context: eventos-web
+      user: usuario-prueba
+      maxRuleDurationInMins: 2
+      maxScanDurationInMins: 25
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: /zap/wrk/${REPORTES}
+      reportFile: zap-web
+      reportTitle: Eventos Gamer - sitio web
+    risks: [high, medium, low, info]
+    confidences: [high, medium, low]
+
+  - type: report
+    parameters:
+      template: traditional-json
+      reportDir: /zap/wrk/${REPORTES}
+      reportFile: zap-web
+    risks: [high, medium, low, info]
+    confidences: [high, medium, low]
