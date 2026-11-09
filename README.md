@@ -62,6 +62,7 @@ Todos usan la clave `Gamer2026*`.
 | `vale` | Valentina Mora | USUARIO |
 | `mati` | Matías Fuentes | USUARIO |
 | `cata` | Catalina Pérez | USUARIO |
+| `roberto` | Roberto Sánchez | USUARIO |
 
 Después de 5 intentos fallidos seguidos, la cuenta queda bloqueada por 15 minutos.
 

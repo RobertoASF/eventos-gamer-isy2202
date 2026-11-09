@@ -2,7 +2,7 @@
 -- Crea un esquema por microservicio, sus tablas y los datos de prueba.
 --   gamer_usuarios -> ms-usuarios
 --   gamer_eventos  -> ms-eventos
--- Usuarios de prueba, todos con la clave Gamer2026*: admin, vale, mati, cata
+-- Usuarios de prueba, todos con la clave Gamer2026*: admin, vale, mati, cata, roberto
 
 SET NAMES utf8mb4;
 
@@ -44,7 +44,8 @@ INSERT INTO usuarios (nombre_usuario, nombre, email, password_hash, rol_id, fech
 ('admin', 'Administrador Plataforma', 'admin@eventosgamer.cl', '$2a$10$AA7wKWU3IaATSwS5vOofau2mnfNQt7hrcg0BmANQFCgMaBDKXyJ.i', 1, '2026-09-28 09:00:00'),
 ('vale', 'Valentina Mora', 'vale@eventosgamer.cl', '$2a$10$NFxeS4tqXt13VL3QlIVtmuaW1L2IKTBpbEUOeqnHMfUQGgb9zq4zO', 2, '2026-10-02 18:40:00'),
 ('mati', 'Matías Fuentes', 'mati@eventosgamer.cl', '$2a$10$DBdvY5qk.UwmymNAcxzad./hMUfaXY8HGeRMaZKFMVuuuWR/WIhJG', 2, '2026-10-04 21:15:00'),
-('cata', 'Catalina Pérez', 'cata@eventosgamer.cl', '$2a$10$2N6Vx1c8YGiM1OiYcrFDcO.vBPfSah6GGL0NB8CL1QeJVdXEJRJiO', 2, '2026-10-11 12:05:00');
+('cata', 'Catalina Pérez', 'cata@eventosgamer.cl', '$2a$10$2N6Vx1c8YGiM1OiYcrFDcO.vBPfSah6GGL0NB8CL1QeJVdXEJRJiO', 2, '2026-10-11 12:05:00'),
+('roberto', 'Roberto Sánchez', 'roberto@eventosgamer.cl', '$2a$10$4HjXFwcF4ob/Y9qcyjwR0uyTnHMd34LPQuGaejJuZJmYewht2vFya', 2, '2026-11-09 20:58:00');
 
 -- =====================================================================
 -- Eventos
