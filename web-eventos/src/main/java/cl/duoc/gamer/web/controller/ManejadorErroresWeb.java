@@ -36,6 +36,12 @@ public class ManejadorErroresWeb {
         return "redirect:/login?expirada";
     }
 
+    @ExceptionHandler(HttpClientErrorException.Forbidden.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String prohibido(Model model) {
+        return pagina(model, HttpStatus.FORBIDDEN, "No tienes permisos para realizar esta acción.");
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String parametroInvalido(Model model) {

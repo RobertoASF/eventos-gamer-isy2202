@@ -85,8 +85,160 @@
             </figure>
         </div>
     </section>
+
+    <!-- Fotos y videos que suben los usuarios -->
+    <section class="bloque" id="multimedia">
+        <div class="bloque__cabecera">
+            <h2>Fotos y videos de la comunidad</h2>
+            <span class="contador" th:text="|${#lists.size(multimedia)} publicados|">0 publicados</span>
+        </div>
+        <p class="aviso aviso--ok" th:if="${avisoMultimedia}" th:text="${avisoMultimedia}" role="status">Listo</p>
+        <p class="aviso aviso--error" th:if="${alertaMultimedia}" th:text="${alertaMultimedia}" role="alert">Error</p>
+
+        <div class="galeria" th:unless="${multimedia.isEmpty()}">
+            <figure class="medio" th:each="medio : ${multimedia}">
+                <video th:if="${medio.esVideo()}" controls preload="metadata" width="640" height="400"
+                       th:src="@{/detalle/{id}/multimedia/{medio}(id=${evento.id},medio=${medio.id})}">
+                    Tu navegador no puede reproducir este video.
+                </video>
+                <img th:unless="${medio.esVideo()}" width="640" height="400" loading="lazy"
+                     th:src="@{/detalle/{id}/multimedia/{medio}(id=${evento.id},medio=${medio.id})}"
+                     th:alt="${#strings.isEmpty(medio.descripcion)} ? |Foto subida por ${medio.autor}| : ${medio.descripcion}">
+                <figcaption>
+                    <span th:text="${#strings.isEmpty(medio.descripcion)} ? 'Sin descripción' : ${medio.descripcion}">Descripción</span>
+                    <small th:text="|${medio.autor} · ${#temporals.format(medio.fechaCreacion, 'dd MMM yyyy')}|">Autor</small>
+                    <form th:if="${medio.puedeEliminar}" method="post"
+                          th:action="@{/detalle/{id}/multimedia/{medio}/eliminar(id=${evento.id},medio=${medio.id})}">
+                        <button type="submit" class="boton-texto">Eliminar</button>
+                    </form>
+                </figcaption>
+            </figure>
+        </div>
+        <p class="vacio" th:if="${multimedia.isEmpty()}">Todavía nadie sube fotos o videos de este evento.</p>
+
+        <form class="panel" method="post" enctype="multipart/form-data"
+              th:action="@{/detalle/{id}/multimedia(id=${evento.id})}" data-limite-foto="5242880" data-limite-video="26214400">
+            <h3>Agregar una foto o un video</h3>
+            <div class="panel__campos">
+                <div class="campo">
+                    <label for="archivo">Archivo</label>
+                    <input id="archivo" name="archivo" type="file" required
+                           accept="image/jpeg,image/png,video/mp4,video/webm">
+                    <p class="campo__ayuda">Fotos JPG o PNG de hasta 5 MB y videos MP4 o WebM de hasta 25 MB.</p>
+                    <p class="campo__error" id="error-archivo" role="alert" hidden></p>
+                </div>
+                <div class="campo">
+                    <label for="descripcion">Descripción (opcional)</label>
+                    <input id="descripcion" name="descripcion" type="text" maxlength="120">
+                </div>
+            </div>
+            <button type="submit" class="boton">Subir archivo</button>
+        </form>
+    </section>
+
+    <!-- Comentarios y valoraciones -->
+    <section class="bloque" id="opiniones">
+        <div class="bloque__cabecera">
+            <h2>Opiniones</h2>
+            <p class="valoracion" th:if="${opiniones.total > 0}">
+                <span class="estrellas" role="img" th:attr="aria-label=|${opiniones.promedio} de 5 estrellas|">
+                    <span th:each="n : ${#numbers.sequence(1, 5)}" th:classappend="${n <= opiniones.estrellasPromedio()} ? 'llena'">&#9733;</span>
+                </span>
+                <strong th:text="${#numbers.formatDecimal(opiniones.promedio, 1, 1, 'COMMA')}">4,5</strong>
+                <span th:text="|(${opiniones.total} ${opiniones.total == 1 ? 'opinión' : 'opiniones'})|">(2 opiniones)</span>
+            </p>
+        </div>
+        <p class="aviso aviso--ok" th:if="${avisoOpinion}" th:text="${avisoOpinion}" role="status">Listo</p>
+        <p class="aviso aviso--error" th:if="${alertaOpinion}" th:text="${alertaOpinion}" role="alert">Error</p>
+
+        <form class="panel" method="post" th:action="@{/detalle/{id}/opiniones(id=${evento.id})}" th:object="${opinionForm}">
+            <h3 th:text="${opiniones.miOpinion == null} ? 'Deja tu opinión' : 'Edita tu opinión'">Deja tu opinión</h3>
+            <fieldset class="selector-estrellas">
+                <legend>Tu valoración</legend>
+                <th:block th:each="n : ${#numbers.sequence(5, 1, -1)}">
+                    <input type="radio" name="puntuacion" required th:id="|estrella-${n}|" th:value="${n}"
+                           th:checked="${opinionForm.puntuacion == n}">
+                    <label th:for="|estrella-${n}|" th:title="|${n} de 5|">
+                        <span class="oculto" th:text="|${n} de 5 estrellas|">5 de 5 estrellas</span>&#9733;
+                    </label>
+                </th:block>
+            </fieldset>
+            <div class="campo">
+                <label for="texto">Comentario</label>
+                <textarea id="texto" th:field="*{texto}" rows="4" maxlength="500" required></textarea>
+            </div>
+            <button type="submit" class="boton"
+                    th:text="${opiniones.miOpinion == null} ? 'Publicar opinión' : 'Guardar cambios'">Publicar opinión</button>
+        </form>
+
+        <ul class="comentarios" th:unless="${opiniones.comentarios.isEmpty()}">
+            <li class="comentario" th:each="comentario : ${opiniones.comentarios}">
+                <div class="comentario__cabecera">
+                    <span class="sesion__avatar" th:text="${#strings.substring(comentario.autor, 0, 1)}">A</span>
+                    <div class="comentario__autor">
+                        <strong th:text="${comentario.autor}">Autor</strong>
+                        <span th:text="|${#temporals.format(comentario.fecha, 'dd MMM yyyy, HH:mm')}${comentario.editado ? ' · editado' : ''}|">Fecha</span>
+                    </div>
+                    <span class="estrellas estrellas--chicas" role="img"
+                          th:attr="aria-label=|${comentario.puntuacion} de 5 estrellas|">
+                        <span th:each="n : ${#numbers.sequence(1, 5)}" th:classappend="${n <= comentario.puntuacion} ? 'llena'">&#9733;</span>
+                    </span>
+                </div>
+                <p class="comentario__texto" th:text="${comentario.texto}">Texto del comentario</p>
+                <form th:if="${comentario.puedeEliminar}" method="post"
+                      th:action="@{/detalle/{id}/opiniones/{comentario}/eliminar(id=${evento.id},comentario=${comentario.id})}">
+                    <button type="submit" class="boton-texto">Eliminar</button>
+                </form>
+            </li>
+        </ul>
+        <p class="vacio" th:if="${opiniones.comentarios.isEmpty()}">Aún no hay opiniones de este evento.</p>
+    </section>
+
+    <!-- Compartir en el sitio y en redes sociales -->
+    <section class="bloque" id="compartir">
+        <div class="bloque__cabecera">
+            <h2>Compartir</h2>
+            <span class="contador" th:text="|Compartido ${compartidos.total} ${compartidos.total == 1 ? 'vez' : 'veces'}|">Compartido 0 veces</span>
+        </div>
+        <p class="aviso aviso--ok" th:if="${avisoCompartir}" th:text="${avisoCompartir}" role="status">Listo</p>
+        <p class="aviso aviso--error" th:if="${alertaCompartir}" th:text="${alertaCompartir}" role="alert">Error</p>
+
+        <div class="compartir">
+            <form class="panel" method="post" th:action="@{/detalle/{id}/compartir(id=${evento.id})}" th:object="${compartirForm}">
+                <h3>En Eventos Gamer</h3>
+                <p class="campo__ayuda">Tu mensaje aparece en la página <a th:href="@{/comunidad}">Comunidad</a> junto al evento.</p>
+                <div class="campo">
+                    <label for="mensaje">Mensaje (opcional)</label>
+                    <textarea id="mensaje" th:field="*{mensaje}" rows="3" maxlength="280"></textarea>
+                </div>
+                <button type="submit" class="boton"
+                        th:text="${compartidos.compartidoEnSitio} ? 'Actualizar mensaje' : 'Compartir en el sitio'">Compartir en el sitio</button>
+            </form>
+
+            <div class="panel" id="redes" th:attr="data-csrf=${_csrf.token},data-csrf-cabecera=${_csrf.headerName}">
+                <h3>En redes sociales</h3>
+                <div class="redes">
+                    <a th:each="enlace : ${redes}" class="red" target="_blank" rel="noopener noreferrer"
+                       th:classappend="|red--${#strings.toLowerCase(enlace.red().name())}|"
+                       th:href="${enlace.url()}"
+                       th:attr="data-registro=@{/detalle/{id}/compartir/{red}(id=${evento.id},red=${enlace.red().name()})}"
+                       th:text="${enlace.red().nombre}">Red social</a>
+                </div>
+                <div class="campo">
+                    <label for="enlace-evento">Enlace del evento</label>
+                    <div class="copiar">
+                        <input id="enlace-evento" type="text" readonly th:value="${urlEvento}">
+                        <button type="button" class="boton boton--borde boton--chico" hidden
+                                th:attr="data-copiar=${urlEvento}">Copiar</button>
+                    </div>
+                    <p class="campo__ayuda" id="estado-copiar" role="status"></p>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer th:replace="~{fragmentos :: pie}"></footer>
+<script th:src="@{/js/detalle.js}" defer></script>
 </body>
 </html>

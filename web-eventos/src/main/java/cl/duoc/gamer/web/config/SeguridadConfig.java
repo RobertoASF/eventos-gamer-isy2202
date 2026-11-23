@@ -31,9 +31,10 @@ public class SeguridadConfig {
     public SecurityFilterChain filtroSeguridad(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(rutas -> rutas
-                        // Paginas publicas del caso: inicio y busqueda. El detalle de un evento pide sesion
+                        // Paginas publicas del caso: inicio y busqueda. El detalle de un evento, las fotos y videos,
+                        // las opiniones, compartir y la pagina Comunidad piden sesion (anyRequest)
                         .requestMatchers("/", "/inicio", "/buscar", "/login", "/error").permitAll()
-                        .requestMatchers("/css/**", "/img/**", "/favicon.svg").permitAll()
+                        .requestMatchers("/css/**", "/img/**", "/js/**", "/favicon.svg").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")

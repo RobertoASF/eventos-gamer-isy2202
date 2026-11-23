@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Comunidad')}"></head>
+<body>
+<header th:replace="~{fragmentos :: menu('comunidad')}"></header>
+
+<main class="contenedor seccion">
+    <h1 class="pagina__titulo">Comunidad</h1>
+    <p class="pagina__bajada">Eventos que los gamers compartieron en el sitio, del más reciente al más antiguo.</p>
+
+    <ul class="muro" th:unless="${compartidos.isEmpty()}">
+        <li class="publicacion" th:each="publicacion : ${compartidos}">
+            <div class="comentario__cabecera">
+                <span class="sesion__avatar" th:text="${#strings.substring(publicacion.autor, 0, 1)}">A</span>
+                <div class="comentario__autor">
+                    <strong th:text="${publicacion.autor}">Autor</strong>
+                    <span th:text="|compartió un evento · ${#temporals.format(publicacion.fecha, 'dd MMM yyyy, HH:mm')}|">Fecha</span>
+                </div>
+            </div>
+            <p class="comentario__texto" th:if="${publicacion.mensaje}" th:text="${publicacion.mensaje}">Mensaje</p>
+            <a class="publicacion__evento" th:href="@{/detalle/{id}(id=${publicacion.evento.id})}">
+                <img th:src="@{'/' + ${publicacion.evento.imagenPortada}}" alt="" width="320" height="180" loading="lazy">
+                <span class="publicacion__datos">
+                    <strong th:text="${publicacion.evento.nombre}">Nombre del evento</strong>
+                    <span th:text="|${publicacion.evento.videojuego} · ${#temporals.format(publicacion.evento.fechaInicio, 'dd MMM yyyy')} · ${publicacion.evento.ciudad}, ${publicacion.evento.pais}|">Datos</span>
+                </span>
+            </a>
+        </li>
+    </ul>
+    <p class="vacio" th:if="${compartidos.isEmpty()}">Todavía nadie comparte eventos en el sitio.</p>
+</main>
+
+<footer th:replace="~{fragmentos :: pie}"></footer>
+</body>
+</html>

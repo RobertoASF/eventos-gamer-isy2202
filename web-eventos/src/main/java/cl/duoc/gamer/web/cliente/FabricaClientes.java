@@ -11,9 +11,14 @@ final class FabricaClientes {
 
     // Si una API no responde, la pagina falla rapido en vez de quedar esperando
     static RestClient crear(RestClient.Builder builder, String urlBase) {
+        return crear(builder, urlBase, Duration.ofSeconds(5));
+    }
+
+    // Subir o leer un video toma mas tiempo que una consulta normal
+    static RestClient crear(RestClient.Builder builder, String urlBase, Duration lectura) {
         SimpleClientHttpRequestFactory fabrica = new SimpleClientHttpRequestFactory();
         fabrica.setConnectTimeout(Duration.ofSeconds(3));
-        fabrica.setReadTimeout(Duration.ofSeconds(5));
+        fabrica.setReadTimeout(lectura);
         return builder.clone()
                 .baseUrl(urlBase)
                 .requestFactory(fabrica)

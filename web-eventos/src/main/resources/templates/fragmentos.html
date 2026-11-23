@@ -18,6 +18,7 @@
         <nav class="menu" aria-label="Menú principal">
             <a class="menu__enlace" th:href="@{/}" th:classappend="${activo == 'inicio'} ? 'menu__enlace--activo'">Inicio</a>
             <a class="menu__enlace" th:href="@{/buscar}" th:classappend="${activo == 'buscar'} ? 'menu__enlace--activo'">Buscar eventos</a>
+            <a sec:authorize="isAuthenticated()" class="menu__enlace" th:href="@{/comunidad}" th:classappend="${activo == 'comunidad'} ? 'menu__enlace--activo'">Comunidad</a>
             <a sec:authorize="!isAuthenticated()" class="boton boton--chico" th:href="@{/login}">Iniciar sesión</a>
             <div sec:authorize="isAuthenticated()" class="sesion">
                 <span class="sesion__usuario">
