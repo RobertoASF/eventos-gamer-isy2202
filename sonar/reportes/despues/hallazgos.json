@@ -1,0 +1,287 @@
+{
+ "eventos-gamer-web": {
+  "gate": {
+   "status": "OK",
+   "conditions": [
+    {
+     "status": "OK",
+     "metricKey": "reliability_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "1"
+    },
+    {
+     "status": "OK",
+     "metricKey": "security_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "1"
+    },
+    {
+     "status": "OK",
+     "metricKey": "new_duplicated_lines_density",
+     "comparator": "GT",
+     "errorThreshold": "3",
+     "actualValue": "0.0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "blocker_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "critical_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "new_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "vulnerabilities",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    }
+   ],
+   "ignoredConditions": false,
+   "period": {
+    "mode": "PREVIOUS_VERSION",
+    "date": "2026-11-23T02:03:37+0000"
+   },
+   "caycStatus": "non-compliant"
+  },
+  "issues": [],
+  "hotspots": [],
+  "medidas": [
+   {
+    "metric": "coverage",
+    "value": "0.0",
+    "bestValue": false
+   },
+   {
+    "metric": "reliability_rating",
+    "value": "1.0",
+    "bestValue": true
+   },
+   {
+    "metric": "duplicated_lines_density",
+    "value": "0.0",
+    "bestValue": true
+   },
+   {
+    "metric": "security_rating",
+    "value": "1.0",
+    "bestValue": true
+   },
+   {
+    "metric": "ncloc",
+    "value": "2744"
+   },
+   {
+    "metric": "sqale_rating",
+    "value": "1.0",
+    "bestValue": true
+   }
+  ]
+ },
+ "eventos-gamer-ms-usuarios": {
+  "gate": {
+   "status": "OK",
+   "conditions": [
+    {
+     "status": "OK",
+     "metricKey": "reliability_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "1"
+    },
+    {
+     "status": "OK",
+     "metricKey": "security_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "1"
+    },
+    {
+     "status": "OK",
+     "metricKey": "new_duplicated_lines_density",
+     "comparator": "GT",
+     "errorThreshold": "3",
+     "actualValue": "0.0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "blocker_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "critical_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "new_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "vulnerabilities",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    }
+   ],
+   "ignoredConditions": false,
+   "period": {
+    "mode": "PREVIOUS_VERSION",
+    "date": "2026-11-23T02:04:29+0000"
+   },
+   "caycStatus": "non-compliant"
+  },
+  "issues": [],
+  "hotspots": [],
+  "medidas": [
+   {
+    "metric": "coverage",
+    "value": "42.7",
+    "bestValue": false
+   },
+   {
+    "metric": "reliability_rating",
+    "value": "1.0",
+    "bestValue": true
+   },
+   {
+    "metric": "duplicated_lines_density",
+    "value": "0.0",
+    "bestValue": true
+   },
+   {
+    "metric": "security_rating",
+    "value": "1.0",
+    "bestValue": true
+   },
+   {
+    "metric": "ncloc",
+    "value": "696"
+   },
+   {
+    "metric": "sqale_rating",
+    "value": "1.0",
+    "bestValue": true
+   }
+  ]
+ },
+ "eventos-gamer-ms-eventos": {
+  "gate": {
+   "status": "OK",
+   "conditions": [
+    {
+     "status": "OK",
+     "metricKey": "reliability_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "1"
+    },
+    {
+     "status": "OK",
+     "metricKey": "security_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "1"
+    },
+    {
+     "status": "OK",
+     "metricKey": "new_duplicated_lines_density",
+     "comparator": "GT",
+     "errorThreshold": "3",
+     "actualValue": "0.0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "blocker_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "critical_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "new_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "OK",
+     "metricKey": "vulnerabilities",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    }
+   ],
+   "ignoredConditions": false,
+   "period": {
+    "mode": "PREVIOUS_VERSION",
+    "date": "2026-11-23T02:05:09+0000"
+   },
+   "caycStatus": "non-compliant"
+  },
+  "issues": [],
+  "hotspots": [],
+  "medidas": [
+   {
+    "metric": "coverage",
+    "value": "26.9",
+    "bestValue": false
+   },
+   {
+    "metric": "reliability_rating",
+    "value": "1.0",
+    "bestValue": true
+   },
+   {
+    "metric": "duplicated_lines_density",
+    "value": "2.4",
+    "bestValue": false
+   },
+   {
+    "metric": "security_rating",
+    "value": "1.0",
+    "bestValue": true
+   },
+   {
+    "metric": "ncloc",
+    "value": "1899"
+   },
+   {
+    "metric": "sqale_rating",
+    "value": "1.0",
+    "bestValue": true
+   }
+  ]
+ }
+}
