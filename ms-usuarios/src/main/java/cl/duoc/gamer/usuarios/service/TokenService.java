@@ -32,6 +32,7 @@ public class TokenService {
                 .issuedAt(ahora)
                 .expiresAt(ahora.plus(minutosValidez, ChronoUnit.MINUTES))
                 .claim("uid", usuario.getId())
+                .claim("nombre", usuario.getNombre())
                 .claim("rol", usuario.getRol().getNombre())
                 .build();
         JwsHeader cabecera = JwsHeader.with(MacAlgorithm.HS256).build();

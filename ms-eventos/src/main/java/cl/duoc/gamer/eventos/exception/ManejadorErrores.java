@@ -15,15 +15,29 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
 @RestControllerAdvice
 public class ManejadorErrores extends ResponseEntityExceptionHandler {
 
+    private static final String DATOS_INVALIDOS = "Los datos enviados no son válidos";
+    private static final String FORMATO_INVALIDO = "El valor no tiene un formato válido";
+
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity<Object> noEncontrado(RecursoNoEncontradoException ex, HttpServletRequest request) {
         return responder(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(SolicitudInvalidaException.class)
+    public ResponseEntity<Object> invalida(SolicitudInvalidaException ex, HttpServletRequest request) {
+        return responder(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(AccionNoPermitidaException.class)
+    public ResponseEntity<Object> noPermitida(AccionNoPermitidaException ex, HttpServletRequest request) {
+        return responder(HttpStatus.FORBIDDEN, ex.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(Exception.class)
@@ -32,16 +46,29 @@ public class ManejadorErrores extends ResponseEntityExceptionHandler {
         return responder(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error interno", request.getRequestURI());
     }
 
-    // Los filtros de busqueda llegan por la URL, sus errores de validacion se informan campo por campo
+    // Los filtros de busqueda y los cuerpos JSON se validan campo por campo
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
             HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, String> detalles = new LinkedHashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            String mensaje = error.isBindingFailure() ? "El valor no tiene un formato válido" : error.getDefaultMessage();
+            String mensaje = error.isBindingFailure() ? FORMATO_INVALIDO : error.getDefaultMessage();
             detalles.putIfAbsent(error.getField(), mensaje);
         }
-        ErrorResponse cuerpo = ErrorResponse.de(status, "Los filtros enviados no son válidos", ruta(request), detalles);
+        ErrorResponse cuerpo = ErrorResponse.de(status, DATOS_INVALIDOS, ruta(request), detalles);
+        return ResponseEntity.status(status).headers(headers).body(cuerpo);
+    }
+
+    // Parametros sueltos con restricciones (limite, descripcion de una foto, etc.)
+    @Override
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex,
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        Map<String, String> detalles = new LinkedHashMap<>();
+        ex.getParameterValidationResults().forEach(resultado -> resultado.getResolvableErrors().stream()
+                .findFirst()
+                .ifPresent(error -> detalles.putIfAbsent(resultado.getMethodParameter().getParameterName(),
+                        error.getDefaultMessage())));
+        ErrorResponse cuerpo = ErrorResponse.de(status, DATOS_INVALIDOS, ruta(request), detalles);
         return ResponseEntity.status(status).headers(headers).body(cuerpo);
     }
 
@@ -58,6 +85,8 @@ public class ManejadorErrores extends ResponseEntityExceptionHandler {
             case 400 -> "La solicitud no es válida";
             case 404 -> "El recurso solicitado no existe";
             case 405 -> "El método HTTP no está permitido en esta ruta";
+            case 413 -> "El archivo supera el tamaño máximo permitido";
+            case 415 -> "El tipo de contenido enviado no está permitido";
             default -> "No se pudo procesar la solicitud";
         };
     }

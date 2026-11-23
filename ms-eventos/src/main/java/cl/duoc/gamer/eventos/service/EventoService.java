@@ -69,6 +69,14 @@ public class EventoService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el evento con id " + id));
     }
 
+    // Las fotos, comentarios y compartidos siempre pertenecen a un evento publicado
+    @Transactional(readOnly = true)
+    public void verificarQueExiste(Long id) {
+        if (!eventoRepository.existsById(id)) {
+            throw new RecursoNoEncontradoException("No existe el evento con id " + id);
+        }
+    }
+
     @Transactional(readOnly = true)
     public FiltrosResponse filtros() {
         List<OpcionResponse> videojuegos = videojuegoRepository.findAllByOrderByNombreAsc().stream()
