@@ -43,7 +43,8 @@ server {
     # Las redirecciones de nginx quedan relativas (Location: /eventos/), sin depender del host ni del puerto
     absolute_redirect off;
 
-    # El sitio no recibe archivos: se rechazan cuerpos grandes y conexiones lentas
+    # Solo la ruta para subir fotos y videos recibe archivos (ver mas abajo). En el resto se rechazan
+    # cuerpos grandes y conexiones lentas
     client_max_body_size 64k;
     client_body_timeout 10s;
     client_header_timeout 10s;
@@ -65,6 +66,20 @@ server {
         add_header X-Frame-Options "DENY" always;
         add_header Referrer-Policy "strict-origin-when-cross-origin" always;
         return 301 /eventos/;
+    }
+
+    # Subida de fotos y videos al detalle de un evento: hasta 30 MB (el limite fino lo aplica ms-eventos)
+    location ~ ^/eventos/detalle/[0-9]+/multimedia$ {
+        client_max_body_size 30m;
+        client_body_timeout 60s;
+        proxy_pass http://web-eventos:8080;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Port $puerto_publico;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 60s;
     }
 
     location /eventos/ {

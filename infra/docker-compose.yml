@@ -41,6 +41,7 @@ services:
     <<: *servicio-java
     build: ../ms-usuarios
     environment:
+      TZ: America/Santiago
       DB_URL: jdbc:mysql://mysql:3306/gamer_usuarios
       DB_USUARIO: app_usuarios
       DB_CLAVE: ${DB_CLAVE_USUARIOS}
@@ -59,6 +60,7 @@ services:
     <<: *servicio-java
     build: ../ms-eventos
     environment:
+      TZ: America/Santiago
       DB_URL: jdbc:mysql://mysql:3306/gamer_eventos
       DB_USUARIO: app_eventos
       DB_CLAVE: ${DB_CLAVE_EVENTOS}
@@ -77,8 +79,10 @@ services:
     <<: *servicio-java
     build: ../web-eventos
     environment:
+      TZ: America/Santiago
       SERVICIO_USUARIOS_URL: http://ms-usuarios:8081
       SERVICIO_EVENTOS_URL: http://ms-eventos:8082
+      SITIO_URL_PUBLICA: ${URL_HTTPS}/eventos
     depends_on:
       ms-usuarios:
         condition: service_healthy
