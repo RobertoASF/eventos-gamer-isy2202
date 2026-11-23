@@ -63,9 +63,13 @@ if [ "${SOLO_WEB:-0}" = "1" ]; then
 fi
 
 echo "== Token JWT para las rutas privadas de la API"
-TOKEN=$(docker run --rm --network "$RED" --entrypoint curl "$IMAGEN" -s -X POST "$API_USUARIOS/api/auth/login" \
-    -H "Content-Type: application/json" \
-    -d "{\"nombreUsuario\":\"$ZAP_USUARIO\",\"password\":\"$ZAP_CLAVE\"}" | sed -E 's/.*"token":"([^"]+)".*/\1/')
+# Desde la semana 5 el login exige el token CSRF: se pide en /api/auth/csrf y se envia en la cookie y en el encabezado
+TOKEN=$(docker run --rm --network "$RED" -e API="$API_USUARIOS" -e USUARIO="$ZAP_USUARIO" -e CLAVE="$ZAP_CLAVE" \
+    --entrypoint bash "$IMAGEN" -c '
+    R=$(curl -s -D /tmp/cab "$API/api/auth/csrf"); T=$(echo "$R" | sed -E "s/.*\"token\":\"([^\"]+)\".*/\1/")
+    C=$(grep -i set-cookie /tmp/cab | sed -E "s/.*(XSRF-TOKEN=[^;]+).*/\1/")
+    curl -s -X POST "$API/api/auth/login" -H "X-XSRF-TOKEN: $T" -H "Cookie: $C" -H "Content-Type: application/json" \
+        -d "{\"nombreUsuario\":\"$USUARIO\",\"password\":\"$CLAVE\"}"' | sed -E 's/.*"token":"([^"]+)".*/\1/')
 echo "Token obtenido: ${TOKEN:0:20}..."
 
 echo "== API: $API_EVENTOS y $API_USUARIOS"
