@@ -26,6 +26,10 @@ Solo nginx publica puertos hacia afuera (80 y 443). Las API y MySQL quedan en la
 | Inicio con eventos recientes, populares y banners | `/eventos/` | Pública |
 | Búsqueda por nombre, videojuego, tipo, país, ciudad, fecha y modalidad | `/eventos/buscar` | Pública |
 | Detalle del evento con fotografías | `/eventos/detalle/{id}` | Con sesión |
+| Fotos y videos de la comunidad (subir, ver y eliminar los propios) | `/eventos/detalle/{id}#multimedia` | Con sesión |
+| Comentar y valorar eventos (1 a 5 estrellas) | `/eventos/detalle/{id}#opiniones` | Con sesión |
+| Compartir en el sitio y en redes sociales | `/eventos/detalle/{id}#compartir` | Con sesión |
+| Eventos compartidos por la comunidad | `/eventos/comunidad` | Con sesión |
 | Inicio de sesión | `/eventos/login` | Pública |
 
 El sitio no guarda usuarios propios: el inicio de sesión se valida contra la API de `ms-usuarios`, y el token JWT que entrega queda en la sesión de cada usuario para llamar a las rutas privadas de `ms-eventos`.
@@ -36,7 +40,8 @@ El sitio no guarda usuarios propios: el inicio de sesión se valida contra la AP
 
 | Método | Ruta | Acceso | Descripción |
 |---|---|---|---|
-| POST | `/api/auth/login` | Público | Valida usuario y clave, entrega el token |
+| GET | `/api/auth/csrf` | Público | Entrega el token CSRF que pide el login (cookie `XSRF-TOKEN` y encabezado `X-XSRF-TOKEN`) |
+| POST | `/api/auth/login` | Público, con token CSRF | Valida usuario y clave, entrega el token |
 | GET | `/api/usuarios/perfil` | Con token | Datos del usuario del token |
 
 ### ms-eventos
@@ -49,6 +54,13 @@ El sitio no guarda usuarios propios: el inicio de sesión se valida contra la AP
 | GET | `/api/eventos/filtros` | Público | Opciones para el formulario de búsqueda |
 | GET | `/api/banners` | Público | Avisos comerciales activos |
 | GET | `/api/eventos/{id}` | Con token | Detalle completo con fotografías |
+| GET, POST | `/api/eventos/{id}/multimedia` | Con token | Lista o sube una foto (JPEG/PNG, 5 MB) o un video (MP4/WebM, 7 MB) |
+| GET | `/api/eventos/{id}/multimedia/{mid}/contenido` | Con token | Archivo de la foto o del video (admite `Range`) |
+| DELETE | `/api/eventos/{id}/multimedia/{mid}` | Con token | Solo el autor o un ADMIN |
+| GET, POST | `/api/eventos/{id}/comentarios` | Con token | Opiniones y promedio; una opinión por usuario |
+| DELETE | `/api/eventos/{id}/comentarios/{cid}` | Con token | Solo el autor o un ADMIN |
+| GET, POST | `/api/eventos/{id}/compartidos` | Con token | Resumen o registro de un compartido (SITIO, FACEBOOK, X, WHATSAPP, TELEGRAM, LINKEDIN) |
+| GET | `/api/compartidos?limite=` | Con token | Lo compartido en el sitio, para la página Comunidad |
 
 Las rutas con token piden el encabezado `Authorization: Bearer <token>`. La definición OpenAPI de cada API está en `zap/api`.
 
@@ -71,7 +83,10 @@ Después de 5 intentos fallidos seguidos, la cuenta queda bloqueada por 15 minut
 Los scripts están en la carpeta `bd` y Docker los ejecuta en orden la primera vez que crea el contenedor de MySQL:
 
 1. `01_eventos_gamer.sql` crea los esquemas `gamer_usuarios` y `gamer_eventos`, sus tablas y los datos de prueba.
-2. `02_permisos.sh` crea un usuario de base de datos por microservicio, solo con permiso de lectura sobre su esquema.
+2. `02_interacciones.sql` crea las tablas de la semana 5 (`multimedia_evento`, `comentarios_evento` y `compartidos_evento`) con datos de prueba.
+3. `03_permisos.sh` crea un usuario de base de datos por microservicio: `app_usuarios` solo lee; `app_eventos` lee su esquema y solo puede escribir en las tres tablas de la semana 5.
+
+Para una base que ya existía (por ejemplo la de la VM) se ejecuta `infra/actualizar-bd.sh` con los contenedores levantados.
 
 ## Cómo ejecutarlo en el computador
 
@@ -126,16 +141,36 @@ Resumen de las medidas, ordenadas según el OWASP Top 10 2021:
 
 | Categoría | Medidas |
 |---|---|
-| A01 Control de acceso | Rutas públicas y privadas en el sitio y en la API, token por sesión, CSRF, cookie SameSite=Strict, usuarios de BD solo con SELECT |
+| A01 Control de acceso | Rutas públicas y privadas en el sitio y en la API, token por sesión, CSRF activo en el sitio y en las API (doble envío en el login), cookie SameSite=Strict, solo el autor o un ADMIN elimina fotos y comentarios, usuarios de BD con el mínimo de permisos |
 | A02 Fallas criptográficas | BCrypt, HTTPS con TLS 1.2/1.3, HSTS, cookie Secure, secretos fuera del repositorio |
 | A03 Inyección | JPA Specification con parámetros, validación de filtros, Thymeleaf escapa la salida |
-| A04 Diseño inseguro | Límites de paginación y de largo, bloqueo por intentos fallidos, cuerpo máximo de 64 KB |
+| A04 Diseño inseguro | Límites de paginación y de largo, bloqueo por intentos fallidos, cuerpo máximo de 64 KB (9 MB solo en la ruta de subida), tipo de archivo por su firma, fotos recodificadas sin EXIF, máximo de archivos por usuario |
 | A05 Configuración | CSP y cabeceras de seguridad, versión de nginx oculta, actuator en puerto interno, errores sin detalles, contenedores sin privilegios |
 | A06 Componentes | Versiones actuales y fijas (Spring Boot 4.1.2, nginx 1.30.6, MySQL 8.4.13, Temurin 21.0.13), revisión con Trivy |
 | A07 Autenticación | Bloqueo temporal, mensaje genérico, cambio de id de sesión, expiración de sesión y de token |
 | A08 Integridad | Firma y emisor del JWT validados, algoritmo fijo |
 | A09 Registro | Registro de logins correctos, fallidos y bloqueados con usuario e IP, sin claves ni tokens |
 | A10 SSRF | Las URL de las API vienen de la configuración, nunca del usuario |
+
+## Análisis estático con SonarQube
+
+La carpeta `sonar` tiene la instalación (SonarQube Community Build 26.11 con PostgreSQL), la configuración y el análisis:
+
+```bash
+cd sonar
+cp .env.example .env          # cambiar la clave de la base de datos
+docker compose up -d          # interfaz en http://localhost:9100
+# cambiar la clave de admin en el primer ingreso y guardarla en .env como SONAR_ADMIN_CLAVE
+./configurar.sh               # modo Standard Experience, perfiles, Quality Gate, proyectos y token
+./analizar.sh despues         # compila, prueba y analiza web-eventos, ms-usuarios y ms-eventos
+```
+
+Cada análisis deja la salida de Maven y un resumen de los hallazgos en `sonar/reportes/<carpeta>`:
+
+| Carpeta | Ejecución |
+|---|---|
+| `antes` | Primer análisis: 7 vulnerabilidades (3 Critical), 9 bugs y 1 code smell |
+| `despues` | Después de las correcciones: Quality Gate aprobado, sin vulnerabilidades, bugs ni code smells |
 
 ## Análisis con OWASP ZAP
 
@@ -170,6 +205,7 @@ eventos-gamer
 ├── infra         docker-compose, nginx, certificados y script de despliegue
 ├── ms-usuarios   API de login con JWT
 ├── ms-eventos    API de eventos, búsqueda y banners
+├── sonar         Instalación, configuración y reportes de SonarQube
 ├── web-eventos   Sitio web (Thymeleaf)
 └── zap           Planes, definiciones OpenAPI y reportes de OWASP ZAP
 ```
