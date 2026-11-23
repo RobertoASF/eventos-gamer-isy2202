@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragmentos :: cabecera('Iniciar sesión')}"></head>
+<head th:replace="~{fragmentos :: cabecera('Iniciar sesión')}"><title>Eventos Gamer</title></head>
 <body>
 <header th:replace="~{fragmentos :: menu('')}"></header>
 
@@ -22,7 +22,7 @@
         <form class="formulario" th:action="@{/login}" method="post">
             <div class="campo">
                 <label for="username">Usuario</label>
-                <input type="text" id="username" name="username" autocomplete="username" maxlength="30" required autofocus>
+                <input type="text" id="username" name="username" autocomplete="username" maxlength="30" required>
             </div>
             <div class="campo">
                 <label for="password">Contraseña</label>

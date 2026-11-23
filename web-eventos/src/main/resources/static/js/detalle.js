@@ -18,7 +18,7 @@
             if (archivo.size > limite) {
                 evento.preventDefault();
                 errorArchivo.textContent = esVideo
-                    ? 'El video supera los 25 MB permitidos.'
+                    ? 'El video supera los 7 MB permitidos.'
                     : 'La foto supera los 5 MB permitidos.';
                 errorArchivo.hidden = false;
             }

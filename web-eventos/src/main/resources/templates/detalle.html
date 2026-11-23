@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragmentos :: cabecera(${evento.nombre})}"></head>
+<head th:replace="~{fragmentos :: cabecera(${evento.nombre})}"><title>Eventos Gamer</title></head>
 <body>
 <header th:replace="~{fragmentos :: menu('')}"></header>
 
@@ -117,14 +117,14 @@
         <p class="vacio" th:if="${multimedia.isEmpty()}">Todavía nadie sube fotos o videos de este evento.</p>
 
         <form class="panel" method="post" enctype="multipart/form-data"
-              th:action="@{/detalle/{id}/multimedia(id=${evento.id})}" data-limite-foto="5242880" data-limite-video="26214400">
+              th:action="@{/detalle/{id}/multimedia(id=${evento.id})}" data-limite-foto="5242880" data-limite-video="7340032">
             <h3>Agregar una foto o un video</h3>
             <div class="panel__campos">
                 <div class="campo">
                     <label for="archivo">Archivo</label>
                     <input id="archivo" name="archivo" type="file" required
                            accept="image/jpeg,image/png,video/mp4,video/webm">
-                    <p class="campo__ayuda">Fotos JPG o PNG de hasta 5 MB y videos MP4 o WebM de hasta 25 MB.</p>
+                    <p class="campo__ayuda">Fotos JPG o PNG de hasta 5 MB y videos MP4 o WebM de hasta 7 MB.</p>
                     <p class="campo__error" id="error-archivo" role="alert" hidden></p>
                 </div>
                 <div class="campo">
@@ -156,9 +156,9 @@
             <fieldset class="selector-estrellas">
                 <legend>Tu valoración</legend>
                 <th:block th:each="n : ${#numbers.sequence(5, 1, -1)}">
-                    <input type="radio" name="puntuacion" required th:id="|estrella-${n}|" th:value="${n}"
+                    <input type="radio" name="puntuacion" required id="estrella" th:id="|estrella-${n}|" th:value="${n}"
                            th:checked="${opinionForm.puntuacion == n}">
-                    <label th:for="|estrella-${n}|" th:title="|${n} de 5|">
+                    <label for="estrella" th:for="|estrella-${n}|" th:title="|${n} de 5|">
                         <span class="oculto" th:text="|${n} de 5 estrellas|">5 de 5 estrellas</span>&#9733;
                     </label>
                 </th:block>

@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS multimedia_evento (
     CONSTRAINT fk_multimedia_evento FOREIGN KEY (evento_id) REFERENCES eventos (id) ON DELETE CASCADE,
     CONSTRAINT ck_multimedia_tipo CHECK (tipo IN ('FOTO', 'VIDEO')),
     CONSTRAINT ck_multimedia_contenido CHECK (tipo_contenido IN ('image/jpeg', 'image/png', 'video/mp4', 'video/webm')),
-    CONSTRAINT ck_multimedia_tamano CHECK (tamano > 0 AND tamano <= 26214400),
+    CONSTRAINT ck_multimedia_tamano CHECK (tamano > 0 AND tamano <= 8388608),
     INDEX idx_multimedia_evento (evento_id, fecha_creacion)
 );
 

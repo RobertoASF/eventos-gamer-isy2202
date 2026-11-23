@@ -9,9 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 // Arma los enlaces para compartir un evento en redes sociales. La direccion publica del sitio viene de la
-// configuracion y no del encabezado Host de la peticion, que lo puede cambiar quien hace la peticion
+// configuracion y no del encabezado Host de la peticion, que lo puede cambiar quien hace la peticion.
+// La clase es final porque su constructor puede lanzar una excepcion (ver regla java:S9345)
 @Component
-public class EnlacesCompartir {
+public final class EnlacesCompartir {
 
     private final String urlPublica;
 

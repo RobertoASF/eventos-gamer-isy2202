@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -28,8 +27,10 @@ public class SeguridadConfig {
 
     @Bean
     public SecurityFilterChain filtroSeguridad(HttpSecurity http) throws Exception {
+        // La proteccion CSRF queda activa (no se desactiva). Las rutas que modifican datos son privadas y
+        // llegan con el token en el encabezado Authorization; Spring Security no pide token CSRF en ese caso
+        // porque un sitio externo no puede hacer que el navegador envie ese encabezado
         http
-                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sesion -> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(rutas -> rutas
                         // Inicio y busqueda son publicos, el detalle de un evento pide token

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class ValidadorMultimedia {
 
     static final int MAXIMO_FOTO = 5 * 1024 * 1024;
-    static final int MAXIMO_VIDEO = 25 * 1024 * 1024;
+    static final int MAXIMO_VIDEO = 7 * 1024 * 1024;
     static final int LADO_MAXIMO = 6000;
 
     private static final byte[] FIRMA_JPEG = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
@@ -64,7 +64,7 @@ public class ValidadorMultimedia {
 
     private ArchivoValidado video(byte[] datos, String tipoContenido) {
         if (datos.length > MAXIMO_VIDEO) {
-            throw new SolicitudInvalidaException("Los videos pueden pesar hasta 25 MB");
+            throw new SolicitudInvalidaException("Los videos pueden pesar hasta 7 MB");
         }
         return new ArchivoValidado(TipoMultimedia.VIDEO, tipoContenido, datos);
     }

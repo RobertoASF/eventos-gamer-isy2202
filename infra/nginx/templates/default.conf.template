@@ -68,9 +68,9 @@ server {
         return 301 /eventos/;
     }
 
-    # Subida de fotos y videos al detalle de un evento: hasta 30 MB (el limite fino lo aplica ms-eventos)
+    # Subida de fotos y videos al detalle de un evento: hasta 9 MB (el sitio acepta 8 MB por peticion)
     location ~ ^/eventos/detalle/[0-9]+/multimedia$ {
-        client_max_body_size 30m;
+        client_max_body_size 9m;
         client_body_timeout 60s;
         proxy_pass http://web-eventos:8080;
         proxy_set_header Host $http_host;
