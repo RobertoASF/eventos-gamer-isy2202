@@ -1,0 +1,1046 @@
+{
+ "eventos-gamer-web": {
+  "gate": {
+   "status": "ERROR",
+   "conditions": [
+    {
+     "status": "ERROR",
+     "metricKey": "reliability_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "3"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "security_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "4"
+    },
+    {
+     "status": "OK",
+     "metricKey": "blocker_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "critical_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "1"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "vulnerabilities",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "3"
+    }
+   ],
+   "ignoredConditions": false,
+   "caycStatus": "non-compliant"
+  },
+  "issues": [
+   {
+    "key": "a52db7fe-023a-4b72-a98b-2adb92c5197b",
+    "rule": "java:S9345",
+    "severity": "CRITICAL",
+    "component": "eventos-gamer-web:src/main/java/cl/duoc/gamer/web/modelo/EnlacesCompartir.java",
+    "project": "eventos-gamer-web",
+    "line": 18,
+    "hash": "b52bee5f00065aad2946f379a5dcfe13",
+    "textRange": {
+     "startLine": 18,
+     "endLine": 18,
+     "startOffset": 11,
+     "endOffset": 27
+    },
+    "flows": [
+     {
+      "locations": [
+       {
+        "component": "eventos-gamer-web:src/main/java/cl/duoc/gamer/web/modelo/EnlacesCompartir.java",
+        "textRange": {
+         "startLine": 14,
+         "endLine": 14,
+         "startOffset": 13,
+         "endOffset": 29
+        },
+        "msg": "Non-final class",
+        "msgFormattings": []
+       }
+      ]
+     }
+    ],
+    "status": "OPEN",
+    "message": "Make this class \"final\" or make this throwing constructor \"private\".",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "serialization",
+     "cert"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "COMPLETE",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+     {
+      "softwareQuality": "SECURITY",
+      "severity": "HIGH"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "e7934d4d-1d16-43f7-9de7-2c14a4c31807",
+    "rule": "java:S5693",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/application.properties",
+    "project": "eventos-gamer-web",
+    "line": 27,
+    "hash": "7b3203f6a41bd31bff292868c15c0699",
+    "textRange": {
+     "startLine": 27,
+     "endLine": 27,
+     "startOffset": 0,
+     "endOffset": 43
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "The content length limit of 26214400 bytes is greater than the defined limit of 8388608; make sure it is safe here.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "cwe",
+     "former-hotspot"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+     {
+      "softwareQuality": "SECURITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "63c443d9-b216-4e39-bb83-62597597473b",
+    "rule": "java:S5693",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/application.properties",
+    "project": "eventos-gamer-web",
+    "line": 28,
+    "hash": "d76822782cbc5201cbdf49fb47e3fad5",
+    "textRange": {
+     "startLine": 28,
+     "endLine": 28,
+     "startOffset": 0,
+     "endOffset": 46
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "The content length limit of 27262976 bytes is greater than the defined limit of 8388608; make sure it is safe here.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "cwe",
+     "former-hotspot"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+     {
+      "softwareQuality": "SECURITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "e228a018-acfa-4e0e-a5bf-7058c1306cb3",
+    "rule": "Web:PageWithoutTitleCheck",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/comunidad.html",
+    "project": "eventos-gamer-web",
+    "line": 3,
+    "hash": "31fb483c4b946f81ba747c370e05f297",
+    "textRange": {
+     "startLine": 3,
+     "endLine": 3,
+     "startOffset": 0,
+     "endOffset": 65
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add a <title> tag to this page.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "user-experience"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "678156a7-10db-4f87-bbf1-c119ac50057b",
+    "rule": "Web:InputWithoutLabelCheck",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/detalle.html",
+    "project": "eventos-gamer-web",
+    "line": 159,
+    "hash": "5460cff2c1eb0842a2510f0073682eb2",
+    "textRange": {
+     "startLine": 159,
+     "endLine": 160,
+     "startOffset": 20,
+     "endOffset": 71
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add an \"id\" attribute to this input field and associate it with a label.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "accessibility",
+     "wcag2-a"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "2f038653-2f63-45d3-8803-b9191818d702",
+    "rule": "Web:PageWithoutTitleCheck",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/buscar.html",
+    "project": "eventos-gamer-web",
+    "line": 3,
+    "hash": "77cdf5dce444083fd6385e97e741864e",
+    "textRange": {
+     "startLine": 3,
+     "endLine": 3,
+     "startOffset": 0,
+     "endOffset": 70
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add a <title> tag to this page.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "user-experience"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "aacdb8bd-c22e-43d5-a719-d4a9657542d7",
+    "rule": "Web:PageWithoutTitleCheck",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/detalle.html",
+    "project": "eventos-gamer-web",
+    "line": 3,
+    "hash": "380147272bd0fe0f6a08b4fdc3417887",
+    "textRange": {
+     "startLine": 3,
+     "endLine": 3,
+     "startOffset": 0,
+     "endOffset": 70
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add a <title> tag to this page.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "user-experience"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "3c346e04-8314-4b0b-8ad7-ea0c065c4e5f",
+    "rule": "Web:PageWithoutTitleCheck",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/error.html",
+    "project": "eventos-gamer-web",
+    "line": 3,
+    "hash": "6c451ba46d9b7a9dd560b99587b7aa4f",
+    "textRange": {
+     "startLine": 3,
+     "endLine": 3,
+     "startOffset": 0,
+     "endOffset": 61
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add a <title> tag to this page.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "user-experience"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "14dd5a95-d456-4082-8a1d-fd4e21235769",
+    "rule": "Web:PageWithoutTitleCheck",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/inicio.html",
+    "project": "eventos-gamer-web",
+    "line": 3,
+    "hash": "4eddfeffaa64dd821ae48fb2758348a1",
+    "textRange": {
+     "startLine": 3,
+     "endLine": 3,
+     "startOffset": 0,
+     "endOffset": 62
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add a <title> tag to this page.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "user-experience"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "f642a845-9a87-4c5f-a619-c8952b10d170",
+    "rule": "Web:PageWithoutTitleCheck",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/login.html",
+    "project": "eventos-gamer-web",
+    "line": 3,
+    "hash": "bd8812594d7c065f828b4b16e92f0b89",
+    "textRange": {
+     "startLine": 3,
+     "endLine": 3,
+     "startOffset": 0,
+     "endOffset": 70
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add a <title> tag to this page.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "user-experience"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "af8c07b7-31e6-4c5e-8a56-706d8383a171",
+    "rule": "Web:S9379",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-web:src/main/resources/templates/login.html",
+    "project": "eventos-gamer-web",
+    "line": 25,
+    "hash": "496ca7947b72a0beadc85de544340440",
+    "textRange": {
+     "startLine": 25,
+     "endLine": 25,
+     "startOffset": 16,
+     "endOffset": 123
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this \"autofocus\" attribute, as it can reduce usability and accessibility for users.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "accessibility"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:03:37+0000",
+    "type": "CODE_SMELL",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     },
+     {
+      "softwareQuality": "MAINTAINABILITY",
+      "severity": "LOW"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   }
+  ],
+  "hotspots": [],
+  "medidas": [
+   {
+    "metric": "coverage",
+    "value": "0.0",
+    "bestValue": false
+   },
+   {
+    "metric": "reliability_rating",
+    "value": "3.0",
+    "bestValue": false
+   },
+   {
+    "metric": "duplicated_lines_density",
+    "value": "0.0",
+    "bestValue": true
+   },
+   {
+    "metric": "security_rating",
+    "value": "4.0",
+    "bestValue": false
+   },
+   {
+    "metric": "ncloc",
+    "value": "2718"
+   },
+   {
+    "metric": "sqale_rating",
+    "value": "1.0",
+    "bestValue": true
+   }
+  ]
+ },
+ "eventos-gamer-ms-usuarios": {
+  "gate": {
+   "status": "ERROR",
+   "conditions": [
+    {
+     "status": "OK",
+     "metricKey": "reliability_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "1"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "security_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "4"
+    },
+    {
+     "status": "OK",
+     "metricKey": "blocker_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "critical_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "1"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "vulnerabilities",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "1"
+    }
+   ],
+   "ignoredConditions": false,
+   "caycStatus": "non-compliant"
+  },
+  "issues": [
+   {
+    "key": "08178185-e063-410f-8160-db39bf5e101b",
+    "rule": "java:S4502",
+    "severity": "CRITICAL",
+    "component": "eventos-gamer-ms-usuarios:src/main/java/cl/duoc/gamer/usuarios/config/SeguridadConfig.java",
+    "project": "eventos-gamer-ms-usuarios",
+    "line": 39,
+    "hash": "58ecd4c2a454ac8033ea6e6dfa28eeda",
+    "textRange": {
+     "startLine": 39,
+     "endLine": 39,
+     "startOffset": 46,
+     "endOffset": 53
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure disabling Spring Security's CSRF protection is safe here.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "cwe",
+     "spring",
+     "former-hotspot"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:04:29+0000",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "SECURITY",
+      "severity": "HIGH"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   }
+  ],
+  "hotspots": [],
+  "medidas": [
+   {
+    "metric": "coverage",
+    "value": "44.3",
+    "bestValue": false
+   },
+   {
+    "metric": "reliability_rating",
+    "value": "1.0",
+    "bestValue": true
+   },
+   {
+    "metric": "duplicated_lines_density",
+    "value": "0.0",
+    "bestValue": true
+   },
+   {
+    "metric": "security_rating",
+    "value": "4.0",
+    "bestValue": false
+   },
+   {
+    "metric": "ncloc",
+    "value": "680"
+   },
+   {
+    "metric": "sqale_rating",
+    "value": "1.0",
+    "bestValue": true
+   }
+  ]
+ },
+ "eventos-gamer-ms-eventos": {
+  "gate": {
+   "status": "ERROR",
+   "conditions": [
+    {
+     "status": "ERROR",
+     "metricKey": "reliability_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "3"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "security_rating",
+     "comparator": "GT",
+     "errorThreshold": "1",
+     "actualValue": "4"
+    },
+    {
+     "status": "OK",
+     "metricKey": "blocker_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "0"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "critical_violations",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "1"
+    },
+    {
+     "status": "ERROR",
+     "metricKey": "vulnerabilities",
+     "comparator": "GT",
+     "errorThreshold": "0",
+     "actualValue": "3"
+    }
+   ],
+   "ignoredConditions": false,
+   "caycStatus": "non-compliant"
+  },
+  "issues": [
+   {
+    "key": "28950c3c-ae9e-4758-ab9d-f8f13f56aa8e",
+    "rule": "java:S6218",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-ms-eventos:src/main/java/cl/duoc/gamer/eventos/dto/ContenidoMultimedia.java",
+    "project": "eventos-gamer-ms-eventos",
+    "line": 4,
+    "hash": "0d0054a19961f03c308ce95d261452a9",
+    "textRange": {
+     "startLine": 4,
+     "endLine": 4,
+     "startOffset": 14,
+     "endOffset": 33
+    },
+    "flows": [
+     {
+      "locations": [
+       {
+        "component": "eventos-gamer-ms-eventos:src/main/java/cl/duoc/gamer/eventos/dto/ContenidoMultimedia.java",
+        "textRange": {
+         "startLine": 4,
+         "endLine": 4,
+         "startOffset": 56,
+         "endOffset": 72
+        },
+        "msg": "Array",
+        "msgFormattings": []
+       }
+      ]
+     }
+    ],
+    "status": "OPEN",
+    "message": "Override equals, hashCode and toString to consider array's content in the method",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "java16"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:05:09+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "COMPLETE",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "ce764cfb-bc88-4472-b6a0-be9075429374",
+    "rule": "java:S6218",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-ms-eventos:src/main/java/cl/duoc/gamer/eventos/service/ArchivoValidado.java",
+    "project": "eventos-gamer-ms-eventos",
+    "line": 7,
+    "hash": "20b47eaf59463710588f0d7c94d0f4c3",
+    "textRange": {
+     "startLine": 7,
+     "endLine": 7,
+     "startOffset": 14,
+     "endOffset": 29
+    },
+    "flows": [
+     {
+      "locations": [
+       {
+        "component": "eventos-gamer-ms-eventos:src/main/java/cl/duoc/gamer/eventos/service/ArchivoValidado.java",
+        "textRange": {
+         "startLine": 7,
+         "endLine": 7,
+         "startOffset": 73,
+         "endOffset": 89
+        },
+        "msg": "Array",
+        "msgFormattings": []
+       }
+      ]
+     }
+    ],
+    "status": "OPEN",
+    "message": "Override equals, hashCode and toString to consider array's content in the method",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "java16"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:05:09+0000",
+    "type": "BUG",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "COMPLETE",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+     {
+      "softwareQuality": "RELIABILITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "eb1ce7c4-e193-44b3-b6ca-9922d36d8e0e",
+    "rule": "java:S5693",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-ms-eventos:src/main/resources/application.properties",
+    "project": "eventos-gamer-ms-eventos",
+    "line": 21,
+    "hash": "7b3203f6a41bd31bff292868c15c0699",
+    "textRange": {
+     "startLine": 21,
+     "endLine": 21,
+     "startOffset": 0,
+     "endOffset": 43
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "The content length limit of 26214400 bytes is greater than the defined limit of 8388608; make sure it is safe here.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "cwe",
+     "former-hotspot"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:05:09+0000",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+     {
+      "softwareQuality": "SECURITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "62928de7-0305-4fef-82b6-d4bbe30562c4",
+    "rule": "java:S5693",
+    "severity": "MAJOR",
+    "component": "eventos-gamer-ms-eventos:src/main/resources/application.properties",
+    "project": "eventos-gamer-ms-eventos",
+    "line": 22,
+    "hash": "d76822782cbc5201cbdf49fb47e3fad5",
+    "textRange": {
+     "startLine": 22,
+     "endLine": 22,
+     "startOffset": 0,
+     "endOffset": 46
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "The content length limit of 27262976 bytes is greater than the defined limit of 8388608; make sure it is safe here.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "cwe",
+     "former-hotspot"
+    ],
+    "creationDate": "2026-11-23T01:56:43+0000",
+    "updateDate": "2026-11-23T02:05:09+0000",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+     {
+      "softwareQuality": "SECURITY",
+      "severity": "MEDIUM"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   },
+   {
+    "key": "d647fa61-87fd-4d13-8415-445adaba02d1",
+    "rule": "java:S4502",
+    "severity": "CRITICAL",
+    "component": "eventos-gamer-ms-eventos:src/main/java/cl/duoc/gamer/eventos/config/SeguridadConfig.java",
+    "project": "eventos-gamer-ms-eventos",
+    "line": 32,
+    "hash": "58ecd4c2a454ac8033ea6e6dfa28eeda",
+    "textRange": {
+     "startLine": 32,
+     "endLine": 32,
+     "startOffset": 46,
+     "endOffset": 53
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure disabling Spring Security's CSRF protection is safe here.",
+    "effort": "5min",
+    "debt": "5min",
+    "author": "roberto.asf@gmail.com",
+    "tags": [
+     "cwe",
+     "spring",
+     "former-hotspot"
+    ],
+    "creationDate": "2026-11-09T17:19:17+0000",
+    "updateDate": "2026-11-23T02:05:09+0000",
+    "type": "VULNERABILITY",
+    "scope": "MAIN",
+    "quickFixAvailable": false,
+    "messageFormattings": [],
+    "codeVariants": [],
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+     {
+      "softwareQuality": "SECURITY",
+      "severity": "HIGH"
+     }
+    ],
+    "issueStatus": "OPEN",
+    "prioritizedRule": false,
+    "fromSonarQubeUpdate": false,
+    "internalTags": [],
+    "linkedTicketStatus": "NOT_LINKED"
+   }
+  ],
+  "hotspots": [],
+  "medidas": [
+   {
+    "metric": "coverage",
+    "value": "28.3",
+    "bestValue": false
+   },
+   {
+    "metric": "reliability_rating",
+    "value": "3.0",
+    "bestValue": false
+   },
+   {
+    "metric": "duplicated_lines_density",
+    "value": "2.4",
+    "bestValue": false
+   },
+   {
+    "metric": "security_rating",
+    "value": "4.0",
+    "bestValue": false
+   },
+   {
+    "metric": "ncloc",
+    "value": "1866"
+   },
+   {
+    "metric": "sqale_rating",
+    "value": "1.0",
+    "bestValue": true
+   }
+  ]
+ }
+}

@@ -15,6 +15,14 @@
 	<description>Microservicio de eventos, banners y busqueda de la plataforma de eventos gamer</description>
 	<properties>
 		<java.version>21</java.version>
+		<!-- Analisis estatico con SonarQube (ver sonar/analizar.sh) -->
+		<sonar.host.url>http://localhost:9100</sonar.host.url>
+		<sonar.projectKey>eventos-gamer-ms-eventos</sonar.projectKey>
+		<sonar.projectName>Eventos Gamer - ms-eventos (backend)</sonar.projectName>
+		<!-- Ademas del codigo Java se revisan las plantillas, el CSS, el JavaScript, la configuracion y el Dockerfile -->
+		<sonar.sources>pom.xml,Dockerfile,src/main</sonar.sources>
+		<sonar.exclusions>**/*.svg</sonar.exclusions>
+		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -88,6 +96,31 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.16</version>
+				<executions>
+					<execution>
+						<id>preparar-agente</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>reporte-cobertura</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>5.9.0.7382</version>
 			</plugin>
 		</plugins>
 	</build>
